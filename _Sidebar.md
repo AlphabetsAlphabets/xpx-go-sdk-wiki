@@ -1,4 +1,4 @@
-### Proximax/NEM Catapult SDK for Golang
+### Proximax Catapult SDK for Golang
 ![](https://cdn-images-1.medium.com/max/800/1*7V6dswj9R8S1gRESoONLUg.png)
 * [Home](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Home)
 * [Installation](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Installation)
