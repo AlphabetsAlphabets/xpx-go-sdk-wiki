@@ -1,7 +1,7 @@
 # ProximaX Catapult SDK for Golang
 
 <p align="center"> 
-    <img src="./doc/catapult-nem2-sdk-go.jpg">
+    <img src="https://github.com/proximax-storage/go-xpx-catapult-sdk/blob/master/doc/catapult-nem2-sdk-go.jpg">
 </p>
 
 # [Installation](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Installation)
