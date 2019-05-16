@@ -28,7 +28,7 @@ func main() {
     // Create an account from a private key
     account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
     if err != nil {
-      panic(err)
+        panic(err)
     }
 
     info, err := client.Account.GetAccountProperties(context.Background(), account.Address)
