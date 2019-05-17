@@ -13,7 +13,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -66,7 +66,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -127,7 +127,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -188,7 +188,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -249,7 +249,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -310,7 +310,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
@@ -372,7 +372,7 @@ import (
     "fmt"
     "context"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
 const (
