@@ -47,6 +47,9 @@ func main() {
         fmt.Printf("Block received with height: %v \n", info.Height)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -105,6 +108,9 @@ func main() {
         fmt.Printf("ConfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -163,6 +169,9 @@ func main() {
         fmt.Printf("UnconfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -221,6 +230,9 @@ func main() {
         fmt.Printf("PartialAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -279,6 +291,9 @@ func main() {
         fmt.Printf("PartialRemoved Tx Hash: %v \n", info.Meta.Hash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -338,6 +353,9 @@ func main() {
         fmt.Printf("Cosignature Tx Hash: %v \n", info.ParentHash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
@@ -397,6 +415,9 @@ func main() {
         fmt.Printf("Hash: %v \n", info.Hash)
         return true
     })
+    if err != nil {
+        panic(err)
+    }
 
 }
 ```
