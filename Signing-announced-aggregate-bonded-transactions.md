@@ -1,7 +1,7 @@
 ### Signing announced aggregate bonded transactions
 * You have probably announced an [aggregate bonded transaction](https://github.com/proximax-storage/nem2-sdk-go/wiki/Aggregate-bonded-transactions), but all required cosigners have not signed it yet.
 
-````go
+```go
 package main
 
 import (
@@ -70,4 +70,4 @@ func main() {
 		fmt.Printf("Signer: \t%X\n", accTwo.KeyPair.PublicKey.Raw)
 	}
 }
-````
+```

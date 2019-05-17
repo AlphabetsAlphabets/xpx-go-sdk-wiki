@@ -7,6 +7,7 @@ This is done via a **NewRegisterRootNamespaceTransaction()** and **NewRegisterSu
      * **namespaceName** - The namespace name.
      * **duration** - The duration of the namespace.
      * **networkType** - The network type.
+
 ```go
 // Generate Id from namespaceName
 namespaceName := "newnamespace"
@@ -32,12 +33,14 @@ fmt.Printf("%s\n", restTx)
 fmt.Printf("Hash: \t\t%v\n", stx.Hash)
 fmt.Printf("Signer: \t%X\n", acc.KeyPair.PublicKey.Raw)
 ```
+
 - **Create a sub namespace**
   * Following parameters are required:
      * **deadline** - The deadline to include the transaction.
      * **namespaceName** - The namespace name.
      * **parentNamespace** - The parent namespace name.
      * **networkType** - The network type.
+
 ```go
 parentNamespace, _ := sdk.NewNamespaceIdFromName("newnamespace")
 

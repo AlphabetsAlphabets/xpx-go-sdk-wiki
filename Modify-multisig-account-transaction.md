@@ -9,7 +9,7 @@ Modify multisig account transaction is used to change properties of a multisig a
       * Multsig cosignatory modification type. Supported types are:
         * 0: Add cosignatory.
         * 1: Remove cosignatory.
-````go
+```go
 acc1, err := sdk.NewAccountFromPublicKey("6A3C6BA2975BD0C959F54BD2424CC2150C22F4137E1EFC097BBE768615FC36C7", networkType)
 acc2, err := sdk.NewAccountFromPublicKey("5AACF12FC96E5A093F52F53F885B28D42349EF377C6DD857963E2DE9CF1F69D4", networkType)
 
@@ -42,4 +42,4 @@ if err != nil {
 fmt.Printf("%s\n", restTx)
 fmt.Printf("Hash: \t\t%v\n", stx.Hash)
 fmt.Printf("Signer: \t%X\n\n", acc.KeyPair.PublicKey.Raw)
-````
+```

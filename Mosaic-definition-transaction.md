@@ -12,6 +12,7 @@
      * **levymutable**
      * **divisibility:** Determines up to what decimal place the mosaic can be divided. Divisibility of 3 means that a mosaic can be divided into smallest parts of 0.001 mosaics. The divisibility must be in the range of 0 and 6.
      * **duration:** The number of confirmed blocks we would like to rent our namespace for. Should be inferior or equal to namespace duration.
+
 ```go
 
   mosaicDefinition, err := sdk.NewMosaicDefinitionTransaction(
@@ -39,4 +40,4 @@
   fmt.Printf("%s\n", restTx)
   fmt.Printf("Hash: \t\t%v\n", stx.Hash)
   fmt.Printf("Signer: \t%X\n\n", acc.KeyPair.PublicKey.Raw)
-````
+```

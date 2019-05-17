@@ -7,7 +7,8 @@ Mosaic supply change transaction is used to assign supply to a mosaic.
     * Could be Increase (0) or Decrease (1).
   * **Delta**
     * The amount of supply to increase or decrease.
-````go
+
+```go
     nonce, _ := rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32(),
     mosaicId, _ := sdk.NewMosaicIdFromFullName(nonce, accOne.Address.Address)
     delta := big.NewInt(100000000000)
@@ -34,4 +35,4 @@ Mosaic supply change transaction is used to assign supply to a mosaic.
     fmt.Printf("%s\n", restTx)
     fmt.Printf("Hash: \t\t%v\n", stx.Hash)
     fmt.Printf("Signer: \t%X\n\n", acc.KeyPair.PublicKey.Raw)
-````
+```

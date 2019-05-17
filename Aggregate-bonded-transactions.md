@@ -120,6 +120,8 @@ func main() {
 	fmt.Printf("Signer: \t%X\n", accOne.KeyPair.PublicKey.Raw)
 
 	// wait for the LockFunds transaction to be confirmed! (very important)
+    // you can use websockets to wait explicitly for transaction
+    // to be in certain state, instead of hard waiting
 	time.Sleep(time.Second * 15)
 
 	// Announce aggregate bonded transaction

@@ -1,117 +1,402 @@
 **WebSockets make possible receiving notifications when a transaction or event occurs in the blockchain.
 The notification is received in real time without having to poll the API waiting for a reply.**
 
+
 ### Subscribe block
+
 The block channel notifies for every new block. The message contains the block information.
-````go
+
+```go
 package main
 
 import (
-	"fmt"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
-const	baseUrl     = "http://localhost:3000"
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+)
 
 func main() {
 
-  // timeout in milliseconds
-	// 60000 ms = 60 seconds
-  // 0 = without timeout
-  ws, err := sdk.NewConnectWs(baseUrl, 60000)
-	if err != nil {
-		panic(err)
-	}
+    // Testnet config default
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
 
-	fmt.Println("websocket negotiated uid:", ws.Uid)
-	d, _ := ws.Subscribe.Block()
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), conf)
+    if err != nil {
+        panic(err)
+    }
 
-	for {
-		data := <-d.Ch
-		fmt.Printf("Block received with height: %v \n", data.Height)
-	}
+    // add handler
+    err = wsClient.AddBlockHandler(func (info *sdk.BlockInfo) bool {
+        fmt.Printf("Block received with height: %v \n", info.Height)
+        return true
+    })
+
 }
-````
-### Subscribe confirmedAdded
-The confirmedAdded channel notifies when a transaction related to an address is included in a block. The message contains the transaction.
-````go
-const (
-	baseUrl     = "http://localhost:3000"
-	networkType = sdk.MijinTest
-	privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+```
+
+
+### Subscribe confirmed added
+
+The confirmed added channel notifies when a transaction related to an address is included in a block. The message contains the transaction.
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
 )
 
-acc, err := sdk.NewAccount(privateKey, networkType)
-b, _ := ws.Subscribe.ConfirmedAdded(acc.Address.Address)
-go func() {
-	for {
-		data := <-b.Ch
-		fmt.Printf("ConfirmedAdded Tx Hash: %v \n", data.GetAbstractTransaction().Hash)
-		//b.Unsubscribe()
-		fmt.Println("Successful transfer!")
-	}
-}()
-````
-### Subscribe unconfirmedAdded
-The UnconfirmedAdded channel notifies when a transaction related to an address is in unconfirmed state and waiting to be included in a block. The message contains the transaction.
-````go
-a, _ := ws.Subscribe.UnconfirmedAdded(acc.Address.Address)
-go func() {
-	for {
-		data := <-a.Ch
-		fmt.Printf("UnconfirmedAdded Tx Hash: %v \n", data.GetAbstractTransaction().Hash)
-		//a.Unsubscribe()
-	}
-}()
-````
-### Subscribe partialAdded
-The partialAdded channel notifies when an aggregate bonded transaction related to an address is in partial state and waiting to have all required cosigners. The message contains a transaction.
-````go
-j, _ := ws.Subscribe.PartialAdded(acc.Address.Address)
-go func() {
-	for {
-		data := <-j.Ch
-		fmt.Printf("PartialAdded Tx Hash: %v \n", data.GetAbstractTransaction().Hash)
-		//a.Unsubscribe()
-	}
-}()
-````
-### Subscribe partialRemoved
-The partialRemoved channel notifies when a transaction related to an address was in partial state but not anymore. The message contains the transaction hash.
-````go
-a, _ := ws.Subscribe.PartialRemoved(acc.Address.Address)
-go func() {
-	for {
-		data := <-a.Ch
-		fmt.Printf("PartialRemoved Tx Hash: %v \n", data.Meta.Hash)
-		//a.Unsubscribe()
-	}
-}()
-````
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+        fmt.Printf("ConfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+        return true
+    })
+
+}
+```
+
+
+### Subscribe unconfirmed added
+
+The unconfirmed added channel notifies when a transaction related to an address is in unconfirmed state and waiting to be included in a block. The message contains the transaction.
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddUnconfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+        fmt.Printf("UnconfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+        return true
+    })
+
+}
+```
+
+
+### Subscribe partial added
+
+The partial added channel notifies when an aggregate bonded transaction related to an address is in partial state and waiting to have all required cosigners. The message contains a transaction.
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddPartialAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+        fmt.Printf("PartialAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+        return true
+    })
+
+}
+```
+
+
+### Subscribe partial removed
+
+The partial removed channel notifies when a transaction related to an address was in partial state but not anymore. The message contains the transaction hash.
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddPartialRemovedHandlers(account.Address, func (info sdk.Transaction) bool {
+        fmt.Printf("PartialRemoved Tx Hash: %v \n", info.Meta.Hash)
+        return true
+    })
+
+}
+```
+
+
 ### Subscribe cosignature
-The partialRemoved channel notifies when a cosignature signed transaction related to an address is added to an aggregate bonded transaction with partial state. The message contains the cosignature signed transaction.
-````go
-j, _ := ws.Subscribe.Cosignature(acc.Address.Address)
-go func() {
-	for {
-		data := <-j.Ch
-		fmt.Printf("Cosignature PublicKey: %v \n", data.Signer)
-		fmt.Printf("Cosignature Tx Hash: %v \n", data.ParentHash)
-		//a.Unsubscribe()
-	}
-}()
-````
+
+The cosignature channel notifies when a cosignature signed transaction related to an address is added to an aggregate bonded transaction with partial state. The message contains the cosignature signed transaction.
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddCosignatureHandlers(account.Address, func (info *sdk.SignerInfo) bool {
+        fmt.Printf("Cosignature PublicKey: %v \n", info.Signer)
+        fmt.Printf("Cosignature Tx Hash: %v \n", info.ParentHash)
+        return true
+    })
+
+}
+```
+
+
 ### Subscribe status
+
 The status channel notifies when a transaction related to an address rises an error. The message contains the error message and the transaction hash.
-````go
-c, _ := ws.Subscribe.Status(acc.Address.Address)
- go func() {
-	for {
-		data := <-c.Ch
-		//c.Unsubscribe()
-		fmt.Printf("Status: %v \n", data.Status)
-		fmt.Printf("Status: %v \n", data.Hash)
-		//panic(fmt.Sprint("Status: ", data.Status))
-	}
-}()
-````
+
+```go
+package main
+
+import (
+    "fmt"
+    "context"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk/websocket"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "ws://localhost:3000/ws"
+
+    // Types of network.
+    // MainNet:   104
+    // TestNet:   152
+    // Mijin:     96
+    // MijinTest: 144
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+)
+
+func main() {
+
+    // Create account from private key
+    acc, err := sdk.NewAccount(privateKey, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Testnet config default
+    config, err := sdk.NewConfig(baseUrl, networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create websocket client
+    wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // add handler
+    err = wsClient.AddStatusHandlers(account.Address, func (info *sdk.StatusInfo) bool {
+        fmt.Printf("Status: %v \n", info.Status)
+        fmt.Printf("Hash: %v \n", info.Hash)
+        return true
+    })
+
+}
+```
