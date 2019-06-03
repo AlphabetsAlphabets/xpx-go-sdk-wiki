@@ -1,5 +1,7 @@
+
 ### Get Metadata info for Address
-  * Param address - account Address
+
+- Param address - account Address
 
 ```go
 package main
@@ -44,7 +46,8 @@ func main() {
 
 
 ### Get Metadata info for Mosaic
-  * Param mosaic - id of mosaic
+
+- Param mosaic - id of mosaic
 
 ```go
 package main
@@ -97,7 +100,8 @@ func main() {
 
 
 ### Get Metadata info for Namespace
-  * Param namespace - id of namespace
+
+- Param namespace - id of namespace
 
 ```go
 package main
@@ -145,3 +149,4 @@ func main() {
     // infos, err := client.Metadata.GetNamespaceMetadatasInfo(context.Background(), namespaceId1, namespaceId2)
 }
 ```
+

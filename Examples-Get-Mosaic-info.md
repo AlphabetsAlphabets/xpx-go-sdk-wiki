@@ -1,66 +1,87 @@
-### Get mosaic information.
-  * Param mosaic - Mosaic identifier.
+
+### Get mosaic information
+
+- Param mosaic - Mosaic identifier.
+
 ```go
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"golang.org/x/net/context"
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
 )
 
-// Catapult-api-rest server.
-const	(
-         baseUrl = "http://localhost:3000"
-         networkType = sdk.MijinTest
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+
+    // Types of network.
+    networkType = sdk.MijinTest
 )
 
-// Simple Mosaic API request
+// Simple Account API request
 func main() {
-	conf, err := sdk.NewConfig(baseUrl,networkType)
-	if err != nil {
-		panic(err)
-	}
 
-	// Use the default http client
-	client := sdk.NewClient(nil, conf)
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
 
-  nonce := rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32()
-  // Create a Mosaic identifier.
-  mosaicId, err := sdk.NewMosaicIdFromNonceAndOwner(nonce, accOne.Address.Address)
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-	// Get mosaic information.
-	getMosaic, err := client.Mosaic.GetMosaic(context.Background(), mosaicId)
-	if err != nil {
-		fmt.Printf("Mosaic.GetMosaic returned error: %s", err)
-		return
-	}
-	getMosaicJson, _ := json.MarshalIndent(getMosaic, "", " ")
-	fmt.Printf("%s\n\n", string(getMosaicJson))
+    // Get mosaic information.
+    mosaic, err := client.Mosaic.GetMosaicInfo(context.Background(), sdk.XpxMosaicId)
+    if err != nil {
+        fmt.Printf("Mosaic.GetMosaicInfo returned error: %s", err)
+        return
+    }
+    fmt.Printf("%s\n", mosaic.String())
 }
 ```
-### Get information for a set of mosaics.
-  * Param mosaics - A MosaicIds struct.
+
+### Get information for array of mosaics
+
+- Param mosaics - Mosaic identifiers.
+
 ```go
-  // Create the Mosaics identifier.
-  xpxNonce := rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32()
-  xemNonce := rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32()
+package main
 
-  xpxMosaicId, _ := sdk.NewMosaicIdFromNonceAndOwner(xpxNonce, accOne.Address.Address)
-  xemMosaicId, _ := sdk.NewMosaicIdFromNonceAndOwner(xemNonce, accOne.Address.Address)
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
+)
 
-  var mosaics []*sdk.MosaicId
-  // Append attachment into Mosaics
-  mosaics = append(mosaics, xpxMosaicId)
-  // Append attachment into Mosaics
-  mosaics = append(mosaics, xemMosaicId)
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
 
-  getMosaics, err := client.Mosaic.GetMosaics(context.Background(), mosaics)
-  if err != nil {
-    fmt.Printf("Mosaic.GetMosaics returned error: %s", err)
-    return
-  }
-  getMosaicsJson, _ := json.MarshalIndent(getMosaics, "", " ")
-  fmt.Printf("%s\n\n", string(getMosaicsJson))
+    // Types of network.
+    networkType = sdk.MijinTest
+)
+
+// Simple Account API request
+func main() {
+
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Get mosaic information.
+    mosaics, err := client.Mosaic.GetMosaicInfos(context.Background(), []*sdk.MosaicId{sdk.XpxMosaicId, sdk.XemMosaicId})
+    if err != nil {
+        fmt.Printf("Mosaic.GetMosaicInfos returned error: %s", err)
+        return
+    }
+    for _, mosaic := range mosaics {
+        fmt.Printf("%s\n", mosaic.String())
+    }
+}
 ```
+

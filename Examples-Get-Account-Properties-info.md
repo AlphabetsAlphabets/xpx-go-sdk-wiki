@@ -45,3 +45,4 @@ func main() {
     fmt.Printf("Blocked EntityTypes %s\n", info.AllowedEntityTypes)
 }
 ```
+

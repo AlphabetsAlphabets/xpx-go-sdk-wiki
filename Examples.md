@@ -1,50 +1,51 @@
-###  [Basic functions.](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Basic-Funtions)
- - Generates new Keypair.
- - Generates a Keypair from a private key.
- - Generate Account struct.
- - Generate address from a public key.
- - Generate address from a private key.
-## Types of requests
+###  [Basic functions.](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Basic-Funtions)
 
-### [Account gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-Account-info)
- - Get AccountInfo for an account.
- - Get AccountsInfo for different accounts.
- - Get confirmed transactions information.
- - Get incoming transactions information.
- - Get outgoing transactions information.
- - Get unconfirmed transactions information.
- - Get aggregate bonded transactions information.
- - Get multisig account information.
- - Get multisig account graph information.
+- Generates new Keypair.
+- Create an Address from a given public key
+- Create an Account from a given private key
 
-### [Transaction gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-Transactions-info)
- - Get transaction information of transactionId or transactionHash.
- - Get transaction information for a given set of transactionId or transactionHash.
- - Get transaction status of transactionId or transactionHash.
- - Get an array of transaction statuses for a given set of transactionId or transactionHash.
+### [Account gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Account-info)
 
-### [Mosaic gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-Mosaic-info)
- - Get mosaic information.
- - Get information for a set of mosaics.
- - Get readable names for a set of mosaics.
- - Get an array of MosaicInfo from mosaics created under provided namespace.
+- Get AccountInfo for an account.
+- Get AccountsInfo for multiple accounts.
+- Get confirmed transactions information.
+- Get incoming transactions information.
+- Get outgoing transactions information.
+- Get unconfirmed transactions information.
+- Get multisig account information.
 
-### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-Mosaic-info)
- - Get namespace information.
- - Get namespaces an account owns.
- - Get readable names for a set of namespaces.
- - Get an array of NamespaceInfo for a given set of addresses.
+### [Transaction gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Transactions-info)
 
-### [BlockChain gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-BlockChain-info)
- - Get BlockInfo for a given block height.
- - Get transactions from a block.
- - Get the current height of the chain.
- - Get the current score of the chain.
- - Get the storage information.
- - Get an array of BlockInfo for a given block height and limit.
-### [Network gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples%3A-Get-Network-info)
- - Get the current network type of the chain.
-## Announces a transaction
+- Get transaction information by transaction id or hash
+- Get transaction informations for a given array of transaction ids or hashes
+- Get transaction status for transaction hash or id
+- Get transaction statuses for a given array of transaction hashes or ids
+
+### [Mosaic gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Mosaic-info)
+
+- Get mosaic information.
+- Get mosaic information for array of mosaics
+
+### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Mosaic-info)
+
+- Get namespace information.
+- Get namespaces an account owns.
+- Get readable names for a set of namespaces.
+- Get namespace infos for a given array of addresses
+
+### [Blockchain gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-BlockChain-info)
+
+- Get the current height of the chain.
+- Get BlockInfo for a given block height.
+- Get an array of BlockInfo for a given block height and limit.
+- Get transactions from a block.
+- Get the current score of the chain.
+- Get the storage information.
+
+### [Network gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Network-info)
+
+- Get the current network type of the chain.
+
 ### [Transfer Transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transfer-Transaction)
  - Create a transfer transaction
 ### [Register namespace transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Register-namespace-transaction)

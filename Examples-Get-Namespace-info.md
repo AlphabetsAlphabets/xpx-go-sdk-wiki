@@ -1,92 +1,211 @@
-### Get namespace information.
-  * Param - A Namespace identifier.
+
+### Get namespace information
+
+- Param - A Namespace identifier.
+
 ```go
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"golang.org/x/net/context"
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
 )
 
-// Simple Namespace API request
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+
+    // Types of network.
+    networkType = sdk.MijinTest
+)
+
+// Simple Account API request
 func main() {
 
-	conf, err := sdk.NewConfig("http://localhost:3000",sdk.MijinTest)
-	if err != nil {
-		panic(err)
-	}
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
 
-	// Use the default http client
-	client := sdk.NewClient(nil, conf)
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-	// Generate Id from namespaceName
-	namespaceId, _ := sdk.NewNamespaceIdFromName("proximax")
+    // Generate Id from namespaceName
+    namespaceId, _ := sdk.NewNamespaceIdFromName("proximax")
 
-	getMosaicsFromNamespace, err := client.Namespace.GetNamespace(context.Background(), namespaceId)
-	if err != nil {
-		fmt.Printf("Namespace.GetNamespace returned error: %s", err)
-		return
-	}
-
-	getNamespaceJson, _ := json.MarshalIndent(getMosaicsFromNamespace, "", " ")
-
-	fmt.Printf("%s\n\n", string(getNamespaceJson))
+    namespace, err := client.Namespace.GetNamespaceInfo(context.Background(), namespaceId)
+    if err != nil {
+        fmt.Printf("Namespace.GetNamespaceInfo returned error: %s", err)
+        return
+    }
+    fmt.Printf("%s\n", namespace.String())
 }
 ```
-### Get namespaces an account owns.
-  * Param add - A Address struct.
-  * Param dsid - Identifier of the namespace after which we want the transactions to be returned.
-  * Param 0 - The number of namespaces to return.
+
+### Get namespaces an account owns
+
+- Param address - An owner Address struct
+- Param nsId - TODO
+- Param pageSize - pagination
+
 ```go
-add, err := sdk.NewAddressFromRaw("SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ")
-if err != nil {
-    panic(err)
-}
+package main
 
-getNamespacesFromAccount, err := client.Namespace.GetNamespacesFromAccount(context.Background(), add, nil, 0)
-if err != nil {
-	fmt.Printf("Namespace.GetNamespacesFromAccount returned error: %s", err)
-	return
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+
+    // Types of network.
+    networkType = sdk.MijinTest
+
+    // valid owner address
+    rawAddress = "SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ"
+)
+
+// Simple Account API request
+func main() {
+
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Generate Address struct
+    address, err := sdk.NewAddressFromBase32(rawAddress)
+    if err != nil {
+        panic(err)
+    }
+
+    namespaces, err := client.Namespace.GetNamespaceInfosFromAccount(context.Background(), address, nil, 0)
+    if err != nil {
+        fmt.Printf("Namespace.GetNamespaceInfosFromAccount returned error: %s", err)
+        return
+    }
+    for _, namespace := range namespaces {
+        fmt.Printf("%s\n", namespace.String())
+    }
 }
-getNamespacesFromAccountJson, _ := json.MarshalIndent(getNamespacesFromAccount, "", " ")
-fmt.Printf("%s\n\n", string(getNamespacesFromAccountJson))
 ```
-### Get readable names for a set of namespaces.
+
+### Get readable names for a set of namespaces
+
+- Param - A Namespace identifiers.
+
 ```go
-var NamespaceIDs []*sdk.NamespaceId
-namespaceId, _ := sdk.NewNamespaceIdFromName("proximax")
-NamespaceIDs = append(NamespaceIDs, namespaceId)
+package main
 
-getNamespaceNames, err := client.Namespace.GetNamespaceNames(context.Background(), NamespaceIDs)
-if err != nil {
-	fmt.Printf("Namespace.GetNamespaceNames returned error: %s", err)
-	return
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+
+    // Types of network.
+    networkType = sdk.MijinTest
+)
+
+// Simple Account API request
+func main() {
+
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Generate Ids from namespace names
+    proximaxId, err := sdk.NewNamespaceIdFromName("proximax")
+    if err != nil {
+        panic(err)
+    }
+    mynamespaceId, err := sdk.NewNamespaceIdFromName("mynamespace")
+    if err != nil {
+        panic(err)
+    }
+
+    namespaceNames, err := client.Namespace.GetNamespaceNames(context.Background(), []*sdk.NamespaceId{proximaxId, mynamespaceId})
+    if err != nil {
+        fmt.Printf("Namespace.GetNamespaceNames returned error: %s", err)
+        return
+    }
+    for _, name := range namespaceNames {
+        fmt.Printf("%s\n", name.String())
+    }
 }
-getNamespaceNamesJson, _ := json.MarshalIndent(getNamespaceNames, "", " ")
-fmt.Printf("%s\n\n", string(getNamespaceNamesJson))
 ```
-### Get an array of NamespaceInfo for a given set of addresses.
-  * Param adds - A Addresses type.
-  * Param dsid - Identifier of the namespace after which we want the transactions to be returned.
-  * Param 0 - The number of namespaces to return.
+
+### Get namespace infos for a given array of addresses
+
+- Param addresses - An array of Address structs
+- Param nsId - TODO
+- Param pageSize - pagination
+
 ```go
-var Addresses []*sdk.Address
+package main
 
-aliceAddress, _ := sdk.NewAddressFromRaw("SCFWMP2M2HP43KJYGOBDVQ3SKX3Q6HFH6HZZ6DNR")
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "golang.org/x/net/context"
+)
 
-carolAddress, _ := sdk.NewAddressFromRaw("SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ")
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
 
-Addresses = append(Addresses, aliceAddress)
+    // Types of network.
+    networkType = sdk.MijinTest
 
-Addresses = append(Addresses, carolAddress)
+    // valid addresses
+    rawAddressOne = "SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ"
+    rawAddressTwo = "JTVG3NOXB4T7FTIXKOHWJNQXETK75IHYBFSKUUAS"
+)
 
-getNamespacesFromAccounts, err := client.Namespace.GetNamespacesFromAccounts(context.Background(), adds, nil, 0)
-if err != nil {
-	fmt.Printf("Namespace.getNamespacesFromAccounts returned error: %s", err)
-	return
+// Simple Account API request
+func main() {
+
+    conf, err := sdk.NewConfig(baseUrl,networkType)
+    if err != nil {
+        panic(err)
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Generate Address struct
+    addressOne, err := sdk.NewAddressFromBase32(rawAddressOne)
+    if err != nil {
+        panic(err)
+    }
+    addressTwo, err := sdk.NewAddressFromBase32(rawAddressTwo)
+    if err != nil {
+        panic(err)
+    }
+
+    namespaces, err := client.Namespace.GetNamespaceInfosFromAccounts(context.Background(), []*sdk.Address{addressOne, addressTwo}, nil, 0)
+    if err != nil {
+        fmt.Printf("Namespace.GetNamespaceInfosFromAccounts returned error: %s", err)
+        return
+    }
+    for _, namespace := range namespaces {
+        fmt.Printf("%s\n", namespace.String())
+    }
 }
-getNamespacesFromAccountsJson, _ := json.MarshalIndent(getNamespacesFromAccounts, "", " ")
-fmt.Printf("%s\n\n", string(getNamespacesFromAccountsJson))
 ```
+
