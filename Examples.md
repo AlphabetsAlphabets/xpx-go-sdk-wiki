@@ -26,7 +26,7 @@
 - Get mosaic information.
 - Get mosaic information for array of mosaics
 
-### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Mosaic-info)
+### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Namespace-info)
 
 - Get namespace information.
 - Get namespaces an account owns.
