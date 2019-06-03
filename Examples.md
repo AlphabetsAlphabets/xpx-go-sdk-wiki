@@ -52,6 +52,10 @@
 - Get Metadata info for Mosaic
 - Get Metadata info for Namespace
 
+### [Account Properties gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Metadata-info)
+
+- Get Account Properties
+
 ### [Transfer Transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transfer-Transaction)
  - Create a transfer transaction
 ### [Register namespace transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Register-namespace-transaction)
