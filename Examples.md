@@ -1,4 +1,4 @@
-###  [Basic functions.](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Basic-Funtions)
+###  [Basic functions](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Basic-Functions)
 
 - Generates new Keypair.
 - Create an Address from a given public key
@@ -7,7 +7,7 @@
 ### [Account gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Account-info)
 
 - Get AccountInfo for an account.
-- Get AccountsInfo for multiple accounts.
+- Get AccountInfos for multiple accounts.
 - Get confirmed transactions information.
 - Get incoming transactions information.
 - Get outgoing transactions information.
