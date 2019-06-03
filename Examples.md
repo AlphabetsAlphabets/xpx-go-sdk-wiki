@@ -46,6 +46,12 @@
 
 - Get the current network type of the chain.
 
+### [Metadata gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Metadata-info)
+
+- Get Metadata info for Address
+- Get Metadata info for Mosaic
+- Get Metadata info for Namespace
+
 ### [Transfer Transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transfer-Transaction)
  - Create a transfer transaction
 ### [Register namespace transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Register-namespace-transaction)
