@@ -1,10 +1,11 @@
-###  [Basic functions](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Basic-Functions)
+
+### [Basic functions](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Basic-Functions)
 
 - Generates new Keypair.
 - Create an Address from a given public key
 - Create an Account from a given private key
 
-### [Account gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Account-info)
+### [Account gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Account-info)
 
 - Get AccountInfo for an account.
 - Get AccountInfos for multiple accounts.
@@ -14,26 +15,26 @@
 - Get unconfirmed transactions information.
 - Get multisig account information.
 
-### [Transaction gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Transactions-info)
+### [Transaction gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Transactions-info)
 
 - Get transaction information by transaction id or hash
 - Get transaction informations for a given array of transaction ids or hashes
 - Get transaction status for transaction hash or id
 - Get transaction statuses for a given array of transaction hashes or ids
 
-### [Mosaic gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Mosaic-info)
+### [Mosaic gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Mosaic-info)
 
 - Get mosaic information.
 - Get mosaic information for array of mosaics
 
-### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Namespace-info)
+### [Namespace gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Namespace-info)
 
 - Get namespace information.
 - Get namespaces an account owns.
 - Get readable names for a set of namespaces.
 - Get namespace infos for a given array of addresses
 
-### [Blockchain gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-BlockChain-info)
+### [Blockchain gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-BlockChain-info)
 
 - Get the current height of the chain.
 - Get BlockInfo for a given block height.
@@ -42,17 +43,17 @@
 - Get the current score of the chain.
 - Get the storage information.
 
-### [Network gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Network-info)
+### [Network gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Network-info)
 
 - Get the current network type of the chain.
 
-### [Metadata gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Metadata-info)
+### [Metadata gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Metadata-info)
 
 - Get Metadata info for Address
 - Get Metadata info for Mosaic
 - Get Metadata info for Namespace
 
-### [Account Properties gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Examples-Get-Metadata-info)
+### [Account Properties gets](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Account-properties-info)
 
 - Get Account Properties
 
