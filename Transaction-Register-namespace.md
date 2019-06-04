@@ -1,70 +1,160 @@
-### Register namespace transaction
-Accounts can rent a namespace for an amount of blocks and after a this renew the contract.
-This is done via a **NewRegisterRootNamespaceTransaction()** and **NewRegisterSubNamespaceTransaction()**.
-- **Create a root namespace**
-  * Following parameters are required:
-     * **deadline** - The deadline to include the transaction.
-     * **namespaceName** - The namespace name.
-     * **duration** - The duration of the namespace.
-     * **networkType** - The network type.
+
+### Register root namespace transaction
+
+* Following parameters are required:
+  * **Namespace name**
+    * name of namespace to create
+  * **Duration**
+    * duration of namespace life in blocks
 
 ```go
-// Generate Id from namespaceName
-namespaceName := "newnamespace"
+package main
 
-rootNamespace, err := sdk.NewRegisterRootNamespaceTransaction(
-	sdk.NewDeadline(time.Hour*1),
-	namespaceName,
-	big.NewInt(10000),
-	networkType,
+import (
+    "context"
+    "fmt"
+    "math/big"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
 
-// Sign transaction
-stx, err := acc.Sign(rootNamespace)
-if err != nil {
-	panic(fmt.Errorf("RegisterRootNamespaceTransaction signing returned error: %s", err))
+const (
+    networkType = sdk.MijinTest
+    // A valid private key
+    privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+    // Name of namespace to create
+    namespaceName = "mynamespace"
+)
+
+func main() {
+
+    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Create an account from a private key
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
+        return
+    }
+
+    // Create a new namespace type transaction
+    transaction, err := sdk.NewRegisterRootNamespaceTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        sdk.NewDeadline(time.Hour * 1),
+        // Name of namespace
+        namespaceName,
+        // Duration of namespace life in blocks
+        big.NewInt(10000),
+        networkType,
+    )
+    if err != nil {
+        fmt.Printf("NewRegisterRootNamespaceTransaction returned error: %s", err)
+        return
+    }
+
+    // Sign transaction
+    signedTransaction, err := acc.Sign(transaction)
+    if err != nil {
+        fmt.Printf("Sign returned error: %s", err)
+        return
+    }
+
+    // Announce transaction
+    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    if err != nil {
+        fmt.Printf("Transaction.Announce returned error: %s", err)
+        return
+    }
 }
-// Announce transaction
-restTx, err := client.Transaction.Announce(context.Background(), stx)
-if err != nil {
-	panic(err)
-}
-fmt.Printf("%s\n", restTx)
-fmt.Printf("Hash: \t\t%v\n", stx.Hash)
-fmt.Printf("Signer: \t%X\n", acc.KeyPair.PublicKey.Raw)
 ```
 
-- **Create a sub namespace**
-  * Following parameters are required:
-     * **deadline** - The deadline to include the transaction.
-     * **namespaceName** - The namespace name.
-     * **parentNamespace** - The parent namespace name.
-     * **networkType** - The network type.
+### Register sub namespace transaction
+
+* Following parameters are required:
+  * **Namespace name**
+    * name of namespace to create
+  * **Parent namespace name**
+    * parent namespace name
+
 
 ```go
-parentNamespace, _ := sdk.NewNamespaceIdFromName("newnamespace")
+package main
 
-namespace := "subnamespace"
+import (
+    "context"
+    "fmt"
+    "math/big"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+)
 
-SubNamespace, err := sdk.NewRegisterSubNamespaceTransaction(
-		sdk.NewDeadline(time.Hour*1),
-		namespace,
-		parentNamespace,
-		networkType,
-	)
+const (
+    networkType = sdk.MijinTest
+    // A valid private key
+    privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+    // Name of namespace to create
+    subNamespaceName = "mynamespace"
+    // Name of parent namespace
+    parentNamespaceName = "myparent"
+)
 
-// Sign transaction
-stx, err := acc.Sign(SubNamespace)
-if err != nil {
-	panic(fmt.Errorf("NewRegisterSubNamespaceTransaction signing returned error: %s", err))
+func main() {
+
+    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Create an account from a private key
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
+        return
+    }
+
+    // Create parent namespace id
+    parentnamespaceId, err := sdk.NewNamespaceIdFromName(parentNamespaceName)
+    if err != nil {
+        fmt.Printf("NewNamespaceIdFromName returned error: %s", err)
+        return
+    }
+
+    // Create a new namespace type transaction
+    transaction, err := sdk.NewRegisterSubNamespaceTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        sdk.NewDeadline(time.Hour * 1),
+        // Name of namespace
+        subNamespaceName,
+        // Parent namespace id
+        parentNamespaceId,
+        networkType,
+    )
+    if err != nil {
+        fmt.Printf("NewRegisterSubNamespaceTransaction returned error: %s", err)
+        return
+    }
+
+    // Sign transaction
+    signedTransaction, err := acc.Sign(transaction)
+    if err != nil {
+        fmt.Printf("Sign returned error: %s", err)
+        return
+    }
+
+    // Announce transaction
+    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    if err != nil {
+        fmt.Printf("Transaction.Announce returned error: %s", err)
+        return
+    }
 }
-
-// Announce transaction
-restTx, err := client.Transaction.Announce(context.Background(), stx)
-if err != nil {
-	panic(err)
-}
-fmt.Printf("%s\n", restTx)
-fmt.Printf("Hash: \t\t%v\n", stx.Hash)
-fmt.Printf("Signer: \t%X\n", acc.KeyPair.PublicKey.Raw)
 ```
