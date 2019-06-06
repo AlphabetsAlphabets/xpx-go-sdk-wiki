@@ -1,101 +1,116 @@
+
 ### Aggregate complete transaction
-An aggregate transaction is complete if before announcing it to the network, all cosigners have signed it. If valid, it will be included in a block.
-* **In this case, one private key can sign all the transactions in the aggregate, so it is aggregate complete.**
-- Sending transactions to different recipients atomically
-  * Aggregate transactions accept the following parameters:
-    * **Inner Transaction**: Transactions initiated by different accounts. An aggregate transaction can contain up to 1000 inner transactions. Other aggregate transactions are not allowed as inner transactions.
-````go
+
+Aggregate Complete transaction is a method to execute multiple
+transactions at once. To be valid, all transactions included in
+aggregate complete should be signed by aggregate complete transaction
+owner. If valid, it will be included in a block.
+
+- Following parameters required:
+  - Inner transactions - array of transactions signed by aggregate complete owner.
+  Other aggregate transactions are not allowed as inner transactions.
+
+```go
 package main
 
 import (
-	"context"
-	"fmt"
-	"github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-	"time"
+    "context"
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "time"
 )
 
 const (
-	// Catapult-api-rest server.
-	baseUrl = "http://localhost:3000"
-
-	// Types of network.
-	// MainNet:   104
-	// TestNet:   152
-	// Mijin:     96
-	// MijinTest: 144
-	networkType = sdk.MijinTest
-
-	// A valid private key.
-	privateKey = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
+    networkType = sdk.MijinTest
+    // Valid private key
+    privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+    // Addresses for transfer
+    firstAddressToTransfer = "SCW2KXPU3MCFUASDJAWFPOYYXQHFX76ESSX4QXDN"
+    secondAddressToTransfer = "SCTJXIHO62UZDNA3A3RHQUXP3EWXMCUGWSJAV2CM"
 )
 
 func main() {
 
-	// Testnet config default
-	conf, err := sdk.NewConfig(baseUrl,networkType)
-	if err != nil {
-		panic(err)
-	}
+    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-	// Create an account from a private key
-	acc, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
-	if err != nil {
-	    panic(err)
-	}
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-	// Use the default http client
-	client := sdk.NewClient(nil, conf)
+    // Create an account from a private key
+    account, err := sdk.NewAccountFromPrivateKey(privateKey , networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
+        return
+    }
 
-	deadline := sdk.NewDeadline(time.Hour*1)
+    // Create a new transfer type transaction
+    firstTransferTransaction, err := sdk.NewTransferTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        time.NewDeadline(time.Hour * 1),
+        // The address of the recipient account.
+        sdk.NewAddress(firstAddressToTransfer, networkType),
+        // The array of mosaic to be sent.
+        []*sdk.Mosaic{sdk.Xpx(10)},
+        // The transaction message of 1024 characters.
+        sdk.NewPlainMessage(""),
+        networkType,
+    )
+    if err != nil {
+        fmt.Printf("NewTransferTransaction returned error: %s", err)
+        return
+    }
 
-	// Create a new transfer type transaction
-	ttxOne, err := sdk.NewTransferTransaction(
-		// The maximum amount of time to include the transaction in the blockchain.
-		deadline,
-		// The address of the recipient account.
-		sdk.NewAddress("SCW2KXPU3MCFUASDJAWFPOYYXQHFX76ESSX4QXDN", networkType),
-		// The array of mosaic to be sent.
-		[]*sdk.Mosaic{sdk.Xpx(10)},
-		// The transaction message of 1024 characters.
-		sdk.NewPlainMessage(""),
-		networkType,
-	)
+    // Create a new transfer type transaction
+    secondTransferTransaction, err := sdk.NewTransferTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        time.NewDeadline(time.Hour * 1),
+        // The address of the recipient account.
+        sdk.NewAddress(secondAddressToTransfer, networkType),
+        // The array of mosaic to be sent.
+        []*sdk.Mosaic{sdk.Xpx(10)},
+        // The transaction message of 1024 characters.
+        sdk.NewPlainMessage(""),
+        networkType,
+    )
+    if err != nil {
+        fmt.Printf("NewTransferTransaction returned error: %s", err)
+        return
+    }
 
-	ttxTwo, err := sdk.NewTransferTransaction(
-	    // The maximum amount of time to include the transaction in the blockchain.
-		deadline,
-	    // The address of the recipient account.
-		sdk.NewAddress("SCTJXIHO62UZDNA3A3RHQUXP3EWXMCUGWSJAV2CM", networkType),
-	    // The array of mosaic to be sent.
-		[]*sdk.Mosaic{sdk.Xpx(10)},
-	    // The transaction message of 1024 characters.
-		sdk.NewPlainMessage(""),
-		networkType,
-	)
+    // Convert an aggregate transaction to an inner transaction including transaction signer.
+    firstTransferTransaction.ToAggregate(account.PublicAccount)
+    secondTransferTransaction.ToAggregate(account.PublicAccount)
 
-	// Convert an aggregate transaction to an inner transaction including transaction signer.
-	ttxOne.ToAggregate(acc.PublicAccount)
-	ttxTwo.ToAggregate(acc.PublicAccount)
+    // Create an aggregate complete transaction
+    aggregateTransaction, err := sdk.NewCompleteAggregateTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        sdk.NewDeadline(time.Hour * 1),
+        // Inner transactions
+        []sdk.Transaction{firstTransferTransaction, secondTransferTransaction},
+        networkType
+    )
+    if err != nil {
+        fmt.Printf("NewCompleteAggregateTransaction returned error: %s", err)
+        return
+    }
 
-	// Create an aggregate complete transaction
-	aggregateTransaction, err := sdk.NewCompleteAggregateTransaction(deadline, []sdk.Transaction{ttxOne, ttxTwo}, networkType)
-	if err != nil {
-		panic(err)
-	}
+    // Sign transaction
+    signedTransaction, err := account.Sign(aggregateTransaction)
+    if err != nil {
+        fmt.Printf("Sign returned error: %s", err)
+        return
+    }
 
-	// Sign transaction
-	stx, err := acc.Sign(aggregateTransaction)
-	if err != nil {
-		panic(fmt.Errorf("TransaferTransaction signing returned error: %s", err))
-	}
-
-	// Announce transaction
-	restTx, err := client.Transaction.Announce(context.Background(), stx)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("%s\n", restTx)
-	fmt.Printf("Hash: \t\t%v\n", stx.Hash)
-	fmt.Printf("Signer: \t%X\n", acc.KeyPair.PublicKey.Raw)
+    // Announce transaction
+    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    if err != nil {
+        fmt.Printf("Transaction.Announce returned error: %s", err)
+        return
+    }
 }
-````
+```
+
