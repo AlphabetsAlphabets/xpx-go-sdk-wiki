@@ -1,43 +1,116 @@
+
 ### Mosaic definition transaction
- Before a mosaic can be created or transferred, a corresponding definition of the mosaic has to be created and published to the network.
- - **This is done via a mosaic definition transaction.**
- * Following parameters are required:
-   * **Name**
-     * Name of the mosaic, up to a size limit of 64 characters; must be unique under the domain name.
-   * **Namespace name**
-     * To be able to create a mosaic definition, an account must rent at least one root namespace which the mosaic definition can then refer to.
-   * **Mosaic properties**
-     * **supply mutable:** The creator can choose between a definition that allows a mosaic supply change at a later point or a immutable supply. In the first case the creator is only allowed to decrease the supply within the limits of mosaics owned.
-     * **transferability:** The creator can choose if the mosaic can be transferred to and from arbitrary accounts, or only allowing itself to be the recipient once transferred for the first time.
-     * **levymutable**
-     * **divisibility:** Determines up to what decimal place the mosaic can be divided. Divisibility of 3 means that a mosaic can be divided into smallest parts of 0.001 mosaics. The divisibility must be in the range of 0 and 6.
-     * **duration:** The number of confirmed blocks we would like to rent our namespace for. Should be inferior or equal to namespace duration.
+
+Before a mosaic can be created or transferred, a corresponding
+definition of the mosaic has to be created and published to the network.
+This is done via a **NewMosaicDefinitionTransaction()**.
+
+- Following parameters are required:
+  - **Nonce** - TODO
+  - **Public Key** - public key of future mosaic owner
+  - **Mosaic properties**:
+      - supply mutable - The creator can choose between a definition
+      that allows a mosaic supply change at a later point or a
+      immutable supply. In the first case the creator is only allowed
+      to decrease the supply within the limits of mosaics owned.
+      - transferability - The creator can choose if the mosaic can be
+      transferred to and from arbitrary accounts, or only allowing itself
+      to be the recipient once transferred for the first time.
+      - levymutable - TODO
+      - divisibility - Determines up to what decimal place the mosaic can
+      be divided. Divisibility of 3 means that a mosaic can be divided
+      into smallest parts of 0.001 mosaics. The divisibility must be in
+      the range of 0 and 6.
+      - duration - The number of confirmed blocks we would like to rent
+      our namespace for. Should be inferior or equal to namespace duration.
 
 ```go
+package main
 
-  mosaicDefinition, err := sdk.NewMosaicDefinitionTransaction(
-    sdk.NewDeadline(time.Hour*1),
-    rand.New(rand.NewSource(time.Now().UTC().UnixNano())).Uint32(),
-    acc.PublicAccount.PublicKey,
-    sdk.NewMosaicProperties(
-      true,
-      true,
-      true,
-      4,
-      big.NewInt(10000)),
-    sdk.MijinTest)
-  // Sign transaction
-  stx, err := acc.Sign(mosaicDefinition)
-  if err != nil {
-    panic(fmt.Errorf("NewMosaicDefinitionTransaction signing returned error: %s", err))
-  }
+import (
+    "context"
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "math/rand"
+    "math/big"
+    "time"
+)
 
-  // Announce transaction
-  restTx, err := client.Transaction.Announce(context.Background(), stx)
-  if err != nil {
-    panic(err)
-  }
-  fmt.Printf("%s\n", restTx)
-  fmt.Printf("Hash: \t\t%v\n", stx.Hash)
-  fmt.Printf("Signer: \t%X\n\n", acc.KeyPair.PublicKey.Raw)
+const (
+    networkType = sdk.MijinTest
+    // A valid private key
+    privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+)
+
+func main() {
+
+    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    // Create an account from a private key
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
+        return
+    }
+
+    random := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
+    nonce := random.Uint32()
+
+    // Create a new mosaic definition type transaction
+    transaction, err := sdk.NewMosaicDefinitionTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        sdk.NewDeadline(time.Hour * 1),
+        // TODO
+        nonce,
+        // Public key of mosaic owner
+        account.PublicAccount.PublicKey,
+        sdk.NewMosaicProperties(
+            // The creator can choose between a definition
+            // that allows a mosaic supply change at a later point or a
+            // immutable supply. In the first case the creator is only allowed
+            // to decrease the supply within the limits of mosaics owned.
+            true,
+            // The creator can choose if the mosaic can be
+            // transferred to and from arbitrary accounts, or only allowing itself
+            // to be the recipient once transferred for the first time.
+            true,
+            // TODO
+            true,
+            // Determines up to what decimal place the mosaic can
+            // be divided. Divisibility of 3 means that a mosaic can be divided
+            // into smallest parts of 0.001 mosaics. The divisibility must be in
+            // the range of 0 and 6.
+            4,
+            // The number of confirmed blocks we would like to rent
+            // our namespace for. Should be inferior or equal to namespace duration.
+            big.NewInt(10000)
+        ),
+        networkType
+    )
+    if err != nil {
+        fmt.Printf("NewMosaicDefinitionTransaction returned error: %s", err)
+        return
+    }
+
+    // Sign transaction
+    signedTransaction, err := account.Sign(transaction)
+    if err != nil {
+        fmt.Printf("Sign returned error: %s", err)
+        return
+    }
+
+    // Announce transaction
+    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    if err != nil {
+        fmt.Printf("Transaction.Announce returned error: %s", err)
+        return
+    }
+}
 ```
