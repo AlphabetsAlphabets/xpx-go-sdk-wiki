@@ -20,7 +20,6 @@
     * [Modify multisig account](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-multisig-account)
     * [Aggregate complete](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate-complete)
     * [Aggregate bounded](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate)
-    * [Signing announced aggregate bonded](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Signing-announced-aggregate-bonded)
     * [Account properties](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-properties)
     * [Modify contract](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Contract-modify)
     * [Modify metadata ](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
