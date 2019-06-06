@@ -2,14 +2,12 @@
 ### Transfer Transaction
 
 Transfer transaction is used to send assets between two accounts. It can hold a message of length 1024.
+To create Transfer Transaction use **NewTransferTransaction()**.
 
-* Following parameters required:
-  * **Recipient**
-    * The address of the recipient account.
-  * **Mosaics**
-    * The array of mosaics to be sent.
-  * **Message**
-    * The transaction message of 1024 characters.
+- Following parameters required:
+  - **Recipient** - The address of the recipient account.
+  - **Mosaics** - The array of mosaics to be sent.
+  - **Message** - The transaction message of 1024 characters.
 
 ```go
 package main
@@ -53,7 +51,7 @@ func main() {
         // The array of mosaic to be sent.
         []*sdk.Mosaic{sdk.Xpx(10000000)},
         // The transaction message of 1024 characters.
-        sdk.NewPlainMessage(""),
+        sdk.NewPlainMessage("Here you go"),
         networkType,
     )
     if err != nil {
