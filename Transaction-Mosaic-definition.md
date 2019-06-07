@@ -72,24 +72,15 @@ func main() {
         // Public key of mosaic owner
         account.PublicAccount.PublicKey,
         sdk.NewMosaicProperties(
-            // The creator can choose between a definition
-            // that allows a mosaic supply change at a later point or a
-            // immutable supply. In the first case the creator is only allowed
-            // to decrease the supply within the limits of mosaics owned.
+            // supply mutable
             true,
-            // The creator can choose if the mosaic can be
-            // transferred to and from arbitrary accounts, or only allowing itself
-            // to be the recipient once transferred for the first time.
+            // transferability
             true,
             // TODO
             true,
-            // Determines up to what decimal place the mosaic can
-            // be divided. Divisibility of 3 means that a mosaic can be divided
-            // into smallest parts of 0.001 mosaics. The divisibility must be in
-            // the range of 0 and 6.
+            // divisibility
             4,
-            // The number of confirmed blocks we would like to rent
-            // our namespace for. Should be inferior or equal to namespace duration.
+            // duration
             big.NewInt(10000)
         ),
         networkType
@@ -112,5 +103,6 @@ func main() {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
     }
+
 }
 ```
