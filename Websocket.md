@@ -1,3 +1,4 @@
+
 **WebSockets make possible receiving notifications when a transaction or event occurs in the blockchain.
 The notification is received in real time without having to poll the API waiting for a reply.**
 

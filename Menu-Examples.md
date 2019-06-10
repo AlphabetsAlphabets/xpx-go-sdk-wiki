@@ -82,7 +82,7 @@
 
  - Announce a aggregate complete transaction
 
-### [Aggregate bonded transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate-bonded)
+### [Aggregate bonded transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate)
 
  - Announce a aggregate bonded transaction
 
