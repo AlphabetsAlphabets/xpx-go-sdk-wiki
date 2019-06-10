@@ -57,35 +57,58 @@
 
 - Get Account Properties
 
-### [Transfer Transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transfer-Transaction)
- - Create a transfer transaction
-### [Register namespace transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Register-namespace-transaction)
- - Create a root namespace
- - Create a sub namespace
-### [Mosaic definition transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Mosaic-definition-transaction)
- - Create a mosaic definition transaction
-### [Mosaic supply change transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Mosaic-supply-change-transaction)
- - Create a mosaic supply change transaction
-### [Modify multisig account transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Modify-multisig-account-transaction)
- - Create a modify multisig account transaction
-### [Aggregate complete transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Aggregate-complete-transaction)
- - Create a aggregate complete transaction
-### [Aggregate bonded transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Aggregate-bonded-transactions)
- - Create a aggregate bonded transaction
-### [Aggregate Cosignature transaction]()
- - Create a cosignature transaction
-### [Lock funds transaction]()
- - Create a lock funds transaction
-### [Secret lock transaction]()
- - Create a secret lock transaction
-### [Secret proof transaction]()
- - Create a secret proof transaction
+### [Transfer Transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Transfer)
+
+ - Announce a transfer transaction
+
+### [Register namespace transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Register-namespace)
+
+ - Announce a root namespace
+ - Announce a sub namespace
+
+### [Mosaic definition transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Mosaic-definition)
+
+ - Announce a mosaic definition transaction
+
+### [Mosaic supply change transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Mosaic-supply-change)
+
+ - Announce a mosaic supply change transaction
+
+### [Modify multisig account transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-multisig-account)
+
+ - Announce a modify multisig account transaction
+
+### [Aggregate complete transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate-complete)
+
+ - Announce a aggregate complete transaction
+
+### [Aggregate bonded transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate-bonded)
+
+ - Announce a aggregate bonded transaction
+
+### [Account properties transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-properties)
+
+ - Announce a modify address account properties transaction
+ - Announce a modify mosaic account properties transaction
+ - Announce a modify entity account properties transaction
+
+### [Mofify contract transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-contract)
+
+ - Announce a modify contract transaction
+
+### [Modify metadata transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
+
+ - Announce a modify account metadata transaction
+ - Announce a modify mosaic metadata transaction
+ - Announce a modify namespace metadata transaction
+
 ### [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)
- - Subscribe a block channel
- - Subscribe a confirmedAdded channel
- - Subscribe a unconfirmedAdded channel
- - Subscribe a unconfirmedRemoved channel
- - Subscribe a partialAdded channel
- - Subscribe a partialRemoved channel
- - Subscribe a cosignature channel
- - Subscribe a status channel
+
+ - Subscribe a block
+ - Subscribe a confirmedAdded
+ - Subscribe a unconfirmedAdded
+ - Subscribe a unconfirmedRemoved
+ - Subscribe a partialAdded
+ - Subscribe a partialRemoved
+ - Subscribe a cosignature
+ - Subscribe a status
