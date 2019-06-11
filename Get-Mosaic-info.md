@@ -9,13 +9,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -23,9 +22,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -51,13 +51,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -65,9 +64,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client

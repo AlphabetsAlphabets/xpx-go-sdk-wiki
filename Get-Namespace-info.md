@@ -9,13 +9,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -23,9 +22,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -55,16 +55,14 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
-
     // valid owner address
     rawAddress = "SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ"
 )
@@ -72,9 +70,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -83,7 +82,8 @@ func main() {
     // Generate Address struct
     address, err := sdk.NewAddressFromBase32(rawAddress)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewAddressFromBase32 returned error: %s", err)
+        return
     }
 
     namespaces, err := client.Namespace.GetNamespaceInfosFromAccount(context.Background(), address, nil, 0)
@@ -107,13 +107,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -121,9 +120,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -132,11 +132,13 @@ func main() {
     // Generate Ids from namespace names
     proximaxId, err := sdk.NewNamespaceIdFromName("proximax")
     if err != nil {
-        panic(err)
+        fmt.Printf("NewNamespaceIdFromName returned error: %s", err)
+        return
     }
     mynamespaceId, err := sdk.NewNamespaceIdFromName("mynamespace")
     if err != nil {
-        panic(err)
+        fmt.Printf("NewNamespaceIdFromName returned error: %s", err)
+        return
     }
 
     namespaceNames, err := client.Namespace.GetNamespaceNames(context.Background(), []*sdk.NamespaceId{proximaxId, mynamespaceId})
@@ -162,16 +164,14 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
-
     // valid addresses
     rawAddressOne = "SAUUKSFBYHI57KTEXQNJWHOKXITF7T4BXON3GVTJ"
     rawAddressTwo = "JTVG3NOXB4T7FTIXKOHWJNQXETK75IHYBFSKUUAS"
@@ -180,9 +180,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -191,11 +192,13 @@ func main() {
     // Generate Address struct
     addressOne, err := sdk.NewAddressFromBase32(rawAddressOne)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewAddressFromBase32 returned error: %s", err)
+        return
     }
     addressTwo, err := sdk.NewAddressFromBase32(rawAddressTwo)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewAddressFromBase32 returned error: %s", err)
+        return
     }
 
     namespaces, err := client.Namespace.GetNamespaceInfosFromAccounts(context.Background(), []*sdk.Address{addressOne, addressTwo}, nil, 0)

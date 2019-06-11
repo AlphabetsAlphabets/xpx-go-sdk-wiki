@@ -7,14 +7,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
-    "math/big"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -22,9 +20,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -50,14 +49,13 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
     "math/big"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -65,9 +63,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -97,14 +96,13 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
     "math/big"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -112,9 +110,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -131,7 +130,7 @@ func main() {
         fmt.Printf("Blockchain.GetBlocksByHeightWithLimit returned error: %s", err)
         return
     }
-    for _, blocks := range block {
+    for _, block := range blocks {
         fmt.Printf("%s\n", block.String())
     }
 }
@@ -147,14 +146,13 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
     "math/big"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -162,9 +160,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -193,13 +192,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -207,9 +205,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -233,13 +232,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -247,9 +245,10 @@ const (
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client

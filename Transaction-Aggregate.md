@@ -21,6 +21,7 @@ import (
 )
 
 const (
+    // Types of network.
     networkType = sdk.MijinTest
     // Valid private key
     firstPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
@@ -29,7 +30,7 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
         fmt.Printf("NewConfig returned error: %s", err)
         return

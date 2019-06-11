@@ -11,13 +11,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -25,9 +24,10 @@ const (
 // Simple Transaction API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -54,13 +54,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -68,9 +67,10 @@ const (
 // Simple Transaction API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -82,8 +82,8 @@ func main() {
         fmt.Printf("Transaction.GetTransactions returned error: %s", err)
         return
     }
-    for _, txInfo := range transactions {
-        fmt.Printf("%s\n\n", txInfo.String())
+    for _, transaction := range transactions {
+        fmt.Printf("%s\n\n", transaction.String())
     }
 }
 ```
@@ -100,13 +100,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -114,9 +113,10 @@ const (
 // Simple Transaction API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -143,13 +143,12 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
     // Types of network.
     networkType = sdk.MijinTest
 )
@@ -157,9 +156,10 @@ const (
 // Simple Transaction API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -170,8 +170,8 @@ func main() {
         fmt.Printf("Transaction.GetTransactionStatuses returned error: %s", err)
         return
     }
-    for _, txStatus := range transactionStatuses {
-        fmt.Printf("%s\n\n", txStatus.String())
+    for _, transactionStatus := range transactionStatuses {
+        fmt.Printf("%s\n\n", transactionStatus.String())
     }
 }
 ```

@@ -13,6 +13,9 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
     networkType = sdk.MijinTest
     // Valid account address for Mijin Test network
     address = "SCQALPC7AQHA6OEDCSOF45HEMLKIKFTSFISN2LVG"
@@ -22,9 +25,10 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
 
     // Use the default http client
@@ -59,6 +63,9 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
     networkType = sdk.MijinTest
     // Valid uint 32 nonce
     nonce = ...
@@ -70,7 +77,12 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
+
     if err != nil {
         panic(err)
     }
@@ -113,6 +125,9 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
     networkType = sdk.MijinTest
     // Valid namespace name
     namespaceName = "ticket"
@@ -122,7 +137,12 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig("http://localhost:3000", networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
+
     if err != nil {
         panic(err)
     }

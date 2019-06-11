@@ -7,23 +7,23 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "golang.org/x/net/context"
+    "context"
 )
 
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-
-    // choose any here
+    // Types of network.
     networkType = sdk.MijinTest
 )
 
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        panic(err)
+        fmt.Printf("NewAddressFromBase32 returned error: %s", err)
+        return
     }
 
     // Use the default http client
