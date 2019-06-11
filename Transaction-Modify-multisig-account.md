@@ -6,9 +6,9 @@ account or edit it's properties. This is done via a
 **NewModifyMultisigAccountTransaction()**.
 
 - Following parameters are required:
-  - Minimum Approval Delta - The number of signatures needed to approve a transaction.
-  - Minimum Removal Delta - The number of signatures needed to remove a cosignatory.
-  - Modifications - Array of cosigner accounts added or removed from the
+  - **Minimum Approval Delta** - The number of signatures needed to approve a transaction.
+  - **Minimum Removal Delta** - The number of signatures needed to remove a cosignatory.
+  - **Modifications** - Array of cosigner accounts added or removed from the
     multisignature account. Multsig cosignatory modification type. Supported types are:
       - `sdk.Add`: Add cosignatory.
       - `sdk.Remove`: Remove cosignatory.
@@ -111,6 +111,14 @@ func main() {
 ```
 
 #### How to modify existing multisig account
+
+- Following parameters are required:
+  - **Minimum Approval Delta** - The number of signatures needed to approve a transaction.
+  - **Minimum Removal Delta** - The number of signatures needed to remove a cosignatory.
+  - **Modifications** - Array of cosigner accounts added or removed from the
+    multisignature account. Multsig cosignatory modification type. Supported types are:
+      - `sdk.Add`: Add cosignatory.
+      - `sdk.Remove`: Remove cosignatory.
 
 ```go
 package main

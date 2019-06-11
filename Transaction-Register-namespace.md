@@ -2,10 +2,8 @@
 ### Register root namespace transaction
 
 * Following parameters are required:
-  * **Namespace name**
-    * name of namespace to create
-  * **Duration**
-    * duration of namespace life in blocks
+  * **Namespace name** - name of namespace to create
+  * **Duration** - duration of namespace life in blocks
 
 ```go
 package main
@@ -78,10 +76,8 @@ func main() {
 ### Register sub namespace transaction
 
 * Following parameters are required:
-  * **Namespace name**
-    * name of namespace to create
-  * **Parent namespace name**
-    * parent namespace name
+  * **Namespace name** - name of namespace to create
+  * **Parent namespace name** - parent namespace name
 
 
 ```go

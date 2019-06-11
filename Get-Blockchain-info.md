@@ -41,7 +41,8 @@ func main() {
 
 ### Get BlockInfo for a given block height
 
-- Param height - Block height
+- Following parameters required:
+  - **Height** - height of block to get info from
 
 ```go
 package main
@@ -87,8 +88,9 @@ func main() {
 
 ### Get an array of BlockInfo for a given block height and limit
 
-- Param height - Block height
-- Param limit - Number of following blocks to be returned.
+- Following parameters required:
+  - **Height** - height of block to get info from
+  - **Limit** - how many block infos to return
 
 ```go
 package main
@@ -138,7 +140,8 @@ func main() {
 
 ### Get transactions from a block
 
-- Param height - Block height
+- Following parameters required:
+  - **Height** - height of block to get transactions from
 
 ```go
 package main

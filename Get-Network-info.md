@@ -22,7 +22,7 @@ func main() {
 
     conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
     if err != nil {
-        fmt.Printf("NewAddressFromBase32 returned error: %s", err)
+        fmt.Printf("NewConfig returned error: %s", err)
         return
     }
 

@@ -7,7 +7,7 @@ aggregate complete should be signed by aggregate complete transaction
 owner. If valid, it will be included in a block.
 
 - Following parameters required:
-  - Inner transactions - array of transactions signed by aggregate complete owner.
+  - **Inner transactions** - array of transactions signed by aggregate complete owner.
   Other aggregate transactions are not allowed as inner transactions.
 
 ```go

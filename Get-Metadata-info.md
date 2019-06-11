@@ -1,7 +1,8 @@
 
 ### Get Metadata info for Address
 
-- Param address - account Address
+- Following parameters required:
+  - **Address** - address to get account properties from
 
 ```go
 package main
@@ -51,7 +52,8 @@ func main() {
 
 ### Get Metadata info for Mosaic
 
-- Param mosaic - id of mosaic
+- Following parameters required:
+  - **MosaicID** - mosaic identifier to get mosaic properties from
 
 ```go
 package main
@@ -113,7 +115,8 @@ func main() {
 
 ### Get Metadata info for Namespace
 
-- Param namespace - id of namespace
+- Following parameters required:
+  - **NamespaceID** - namespace identifier to get namespace properties from
 
 ```go
 package main

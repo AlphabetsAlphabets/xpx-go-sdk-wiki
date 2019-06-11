@@ -1,5 +1,8 @@
 ### Get Account Properties
 
+- Following parameters required:
+  - **Address** - address to get account properties from
+
 ```go
 package main
 
@@ -30,9 +33,9 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    account, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    account, err := sdk.NewAccountFromPrivateKey(privateKey , networkType)
     if err != nil {
-        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 

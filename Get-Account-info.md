@@ -43,7 +43,6 @@ func main() {
     }
 
     // Get AccountInfo for an account.
-    // Param address - A Address struct.
     account, err := client.Account.GetAccountInfo(context.Background(), address)
     if err != nil {
         fmt.Printf("Account.GetAccountInfo returned error: %s", err)
@@ -157,7 +156,6 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    // Param account - A Account struct
     transactions, err := client.Account.Transactions(context.Background(), account)
     if err != nil {
         fmt.Printf("Account.Transactions returned error: %s", err)
@@ -214,7 +212,6 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    // Param account - A PublicAccount struct
     transactions, err := client.Account.IncomingTransactions(context.Background(), account, nil)
     if err != nil {
         fmt.Printf("Account.IncomingTransactions returned error: %s", err)
@@ -271,7 +268,6 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    // Param account - A PublicAccount struct
     transactions, err := client.Account.OutgoingTransactions(context.Background(), account)
     if err != nil {
         fmt.Printf("Account.OutgoingTransactions returned error: %s", err)
@@ -382,7 +378,6 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    // Param account - A Address struct
     multisigAccountInfo, err := client.Account.GetMultisigAccountInfo(context.Background(), multisig.Address)
     if err != nil {
         fmt.Printf("Account.GetMultisigAccountInfo returned error: %s", err)

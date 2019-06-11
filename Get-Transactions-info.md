@@ -1,9 +1,10 @@
 
 ### Get transaction information by transaction id or hash
 
-- Param transactionId or transactionHash
-- Example transaction id: "5BB4D6E2415CD84B7971BBAA"
-- Example transaction hash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
+- Following parameters required:
+  - **Transaction ID or hash** - identifier of transaction to get info about
+    - Example transaction id: "5BB4D6E2415CD84B7971BBAA"
+    - Example transaction hash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
 
 ```go
 package main
@@ -44,9 +45,10 @@ func main() {
 
 ### Get transaction informations for a given array of transaction ids or hashes
 
-- Param transactionIds or transactionHashes
-- Example transactionId: "5BB4D6E2415CD84B7971BBAA"
-- Example transactionHash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
+- Following parameters required:
+  - **[]Transaction ID or hash** - identifiers of transaction to get info about
+    - Example transaction id: "5BB4D6E2415CD84B7971BBAA"
+    - Example transaction hash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
 
 ```go
 package main
@@ -90,9 +92,10 @@ func main() {
 
 ### Get transaction status for transaction hash or id
 
-- Param transactionId or transactionHash
-- Example transactionId: "5BB4D6E2415CD84B7971BBAA"
-- Example transactionHash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
+- Following parameters required:
+  - **Transaction ID or hash** - identifier of transaction to get its status
+    - Example transaction id: "5BB4D6E2415CD84B7971BBAA"
+    - Example transaction hash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
 
 ```go
 package main
@@ -133,9 +136,10 @@ func main() {
 
 ### Get transaction statuses for a given array of transaction hashes or ids
 
-- Param transactionIds or transactionHashes
-- Example transactionId: "5BB4D6E2415CD84B7971BBAA"
-- Example transactionHash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
+- Following parameters required:
+  - **[]Transaction ID or hash** - identifier of transaction to get their statuses
+    - Example transaction id: "5BB4D6E2415CD84B7971BBAA"
+    - Example transaction hash: "C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6"
 
 ```go
 package main

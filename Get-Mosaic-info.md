@@ -1,7 +1,8 @@
 
 ### Get mosaic information
 
-- Param mosaic - Mosaic identifier.
+- Following parameters required:
+  - **MosaicID** - mosaic identifier to get info about
 
 ```go
 package main
@@ -43,7 +44,8 @@ func main() {
 
 ### Get information for array of mosaics
 
-- Param mosaics - Mosaic identifiers.
+- Following parameters required:
+  - **[]MosaicID** - mosaic identifiers to get info about
 
 ```go
 package main

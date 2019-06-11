@@ -1,7 +1,8 @@
 
 ### Get namespace information
 
-- Param - A Namespace identifier.
+- Following parameters required:
+  - **NamespaceID** - namespace identifier to get info about
 
 ```go
 package main
@@ -45,9 +46,10 @@ func main() {
 
 ### Get namespaces an account owns
 
-- Param address - An owner Address struct
-- Param nsId - TODO
-- Param pageSize - pagination
+- Following parameters required:
+  - **Address** - address of account to get namespaces from
+  - **pageSize** - pagination
+  - **nsId** - TODO
 
 ```go
 package main
@@ -99,7 +101,8 @@ func main() {
 
 ### Get readable names for a set of namespaces
 
-- Param - A Namespace identifiers.
+- Following parameters required:
+  - **[]NamespaceID** - namespace identifiers to get info about
 
 ```go
 package main
@@ -154,9 +157,10 @@ func main() {
 
 ### Get namespace infos for a given array of addresses
 
-- Param addresses - An array of Address structs
-- Param nsId - TODO
-- Param pageSize - pagination
+- Following parameters required:
+  - **[]Address** - addresses of accounts to get namespaces from
+  - **pageSize** - pagination
+  - **nsId** - TODO
 
 ```go
 package main
