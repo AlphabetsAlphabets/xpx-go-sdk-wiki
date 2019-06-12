@@ -102,7 +102,7 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return

@@ -11,6 +11,7 @@ package main
 
 import (
     "fmt"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -55,6 +56,7 @@ package main
 
 import (
     "fmt"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -102,6 +104,7 @@ package main
 
 import (
     "fmt"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -146,6 +149,7 @@ package main
 
 import (
     "fmt"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -169,7 +173,7 @@ func main() {
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
-    transactionStatuses, err := client.Transaction.GetTransactionStatus(context.Background(), []string{"C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6", "463FDEC912FC4BA3D84FEC31E8293FAE6D142FC271A71E464FDA563F056A6151"})
+    transactionStatuses, err := client.Transaction.GetTransactionStatuses(context.Background(), []string{"C95B61BF128BF8D7ED12B997197F2CC220BF33A19BBCF10C67B22086BED85ED6", "463FDEC912FC4BA3D84FEC31E8293FAE6D142FC271A71E464FDA563F056A6151"})
     if err != nil {
         fmt.Printf("Transaction.GetTransactionStatuses returned error: %s", err)
         return

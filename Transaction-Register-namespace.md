@@ -12,6 +12,7 @@ import (
     "context"
     "fmt"
     "math/big"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
 
@@ -58,14 +59,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := acc.Sign(transaction)
+    signedTransaction, err := account.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
@@ -87,6 +88,7 @@ import (
     "context"
     "fmt"
     "math/big"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
 
@@ -142,14 +144,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := acc.Sign(transaction)
+    signedTransaction, err := account.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return

@@ -6,6 +6,7 @@ package main
 
 import (
     "fmt"
+    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -34,7 +35,7 @@ func main() {
         fmt.Printf("Network.GetNetworkType returned error: %s", err)
         return
     }
-    fmt.Printf("%s\n", networkType)
+    fmt.Printf("%s\n", actualNetworkType)
 }
 ```
 

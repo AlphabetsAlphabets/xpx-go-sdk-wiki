@@ -55,7 +55,7 @@ func main() {
     }
 
     // Create a modify metadata transaction
-    trx, err := sdk.NewModifyMetadataAddressTransaction(
+    transaction, err := sdk.NewModifyMetadataAddressTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadlint(time.Hour * 1),
         // Address where metadata should be attached
@@ -80,14 +80,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := customer.Sign(transaction)
+    signedTransaction, err := account.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
@@ -160,7 +160,7 @@ func main() {
     }
 
     // Create a modify metadata transaction
-    trx, err := sdk.NewModifyMetadataMosaicTransaction(
+    transaction, err := sdk.NewModifyMetadataMosaicTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour),
         // Id of mosaic where metadata should be added
@@ -184,14 +184,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := customer.Sign(transaction)
+    signedTransaction, err := account.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
@@ -288,14 +288,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := customer.Sign(transaction)
+    signedTransaction, err := account.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return

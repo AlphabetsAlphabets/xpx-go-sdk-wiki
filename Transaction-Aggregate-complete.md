@@ -107,11 +107,17 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
     }
+
+    // wait for the transaction to be confirmed! (very important)
+    // you can use websockets to wait explicitly for transaction
+    // to be in certain state, instead of hard waiting
+    time.Sleep(time.Second * 30)
+
 }
 ```
 

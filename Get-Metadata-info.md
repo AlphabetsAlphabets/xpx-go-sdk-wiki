@@ -11,6 +11,7 @@ import (
     "context"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "time"
 )
 
 const (
@@ -60,6 +61,7 @@ package main
 
 import (
     "context"
+    "time"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
@@ -123,6 +125,7 @@ package main
 
 import (
     "context"
+    "time"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )

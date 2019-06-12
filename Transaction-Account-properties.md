@@ -89,7 +89,7 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
@@ -194,7 +194,7 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
@@ -281,7 +281,7 @@ func main() {
     }
 
     // Create a new account properties entity type transaction
-    trx, err := sdk.NewAccountPropertiesEntityTypeTransaction(
+    transaction, err := sdk.NewAccountPropertiesEntityTypeTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour),
         // Block transactions with entity type
@@ -308,7 +308,7 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return

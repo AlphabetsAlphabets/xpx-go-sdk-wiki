@@ -107,14 +107,14 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := customer.Sign(transaction)
+    signedTransaction, err := contract.Sign(transaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
