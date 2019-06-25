@@ -32,7 +32,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "math/rand"
-    "math/big"
     "time"
 )
 
@@ -82,7 +81,7 @@ func main() {
             // divisibility
             4,
             // duration
-            big.NewInt(10000)
+            sdk.Duration(10000)
         ),
         networkType
     )

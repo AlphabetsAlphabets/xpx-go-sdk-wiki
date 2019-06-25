@@ -57,7 +57,7 @@ func main() {
     // Create a modify metadata transaction
     transaction, err := sdk.NewModifyMetadataAddressTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        sdk.NewDeadlint(time.Hour * 1),
+        sdk.NewDeadline(time.Hour * 1),
         // Address where metadata should be attached
         account.PublicAccount.Address,
         // Actual data which will be added/removed

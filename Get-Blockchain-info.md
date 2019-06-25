@@ -52,7 +52,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "math/big"
     "time"
 )
 
@@ -76,7 +75,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // height of block in blockchain
-    height := big.NewInt(1)
+    height := sdk.Height(1)
 
     // Get BlockInfo by height
     block, err := client.Blockchain.GetBlockByHeight(context.Background(), height)
@@ -101,7 +100,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "math/big"
     "time"
 )
 
@@ -125,9 +123,9 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // height of block in blockchain
-    height := big.NewInt(1)
+    height := sdk.Height(1)
     // how many BlockInfo's to return
-    limit :=  big.NewInt(100)
+    limit :=  sdk.Amount(100)
 
     // Get BlockInfo's by height with limit
     blocks, err := client.Blockchain.GetBlocksByHeightWithLimit(context.Background(), height, limit)
@@ -153,7 +151,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "math/big"
     "time"
 )
 
@@ -177,7 +174,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // height of block in blockchain
-    height := big.NewInt(1)
+    height := sdk.Height(1)
 
     // Get TransactionInfo's by block height
     transactions, err := client.Blockchain.GetBlockTransactions(context.Background(), height)

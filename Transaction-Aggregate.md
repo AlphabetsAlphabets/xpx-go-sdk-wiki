@@ -54,7 +54,7 @@ func main() {
     // Create a new transfer type transaction
     firstTransferTransaction, err := sdk.NewTransferTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        time.NewDeadline(time.Hour * 1),
+        sdk.NewDeadline(time.Hour * 1),
         // The address of the recipient account.
         secondAccount.Address,
         // The array of mosaic to be sent.
@@ -115,7 +115,7 @@ func main() {
         // Funds to lock
         sdk.XpxRelative(10),
         // Duration of lock transaction in blocks
-        big.NewInt(1000),
+        sdk.Duration(1000),
         // Aggregate bounded transaction for lock
         signedAggregateBoundedTransaction,
         networkType

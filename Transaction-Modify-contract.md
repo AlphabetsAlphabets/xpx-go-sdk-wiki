@@ -89,7 +89,7 @@ func main() {
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
         // Duration of contract in blocks
-        1000,
+        sdk.Duration(1000),
         // Hash of file which is being uploaded
         fileHash,
         // adding customer to the contract

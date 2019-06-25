@@ -20,7 +20,6 @@ import (
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "time"
     "math/rand"
-    "math/big"
 )
 
 const (
@@ -62,7 +61,7 @@ func main() {
         // Supply change direction
         sdk.Increase,
         // Delta
-        big.NewInt(100000000000),
+        sdk.Duration(100000000000),
         networkType
     )
     if err != nil {

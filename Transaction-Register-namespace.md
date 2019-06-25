@@ -50,7 +50,7 @@ func main() {
         // Name of namespace
         namespaceName,
         // Duration of namespace life in blocks
-        big.NewInt(10000),
+        sdk.Duration(10000),
         networkType,
     )
     if err != nil {
@@ -87,7 +87,6 @@ package main
 import (
     "context"
     "fmt"
-    "math/big"
     "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )

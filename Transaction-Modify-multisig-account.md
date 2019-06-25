@@ -224,7 +224,7 @@ func main() {
         // Funds to lock
         sdk.XpxRelative(10),
         // Duration of lock transaction in blocks
-        big.NewInt(1000),
+        sdk.Duration(100),
         // Aggregate bounded transaction for lock
         signedAggregateBoundedTransaction,
         networkType
