@@ -21,6 +21,6 @@
     * [Aggregate complete](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate-complete)
     * [Aggregate bounded](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Aggregate)
     * [Account properties](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-properties)
-    * [Modify contract](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Contract-modify)
+    * [Modify contract](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-contract)
     * [Modify metadata ](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
   * [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)
