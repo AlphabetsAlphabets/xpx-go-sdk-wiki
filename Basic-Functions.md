@@ -58,17 +58,22 @@ func main() {
   * MijinTest= Mijin test net network.
 * Return - A Account struct
 
-```php
-<?php
-    require "vendor/autoload.php";
-    use NEM\Model\Account;
-    $privateKey = "760B7E531925FAB015349C12093943E86FBFBE5CB831F14447ED190EC10F6B1B";
-    $networkType = "PublicTest";
-    
-    $account = (new Account)->newAccountFromPrivateKey($privateKey,$networkType);
-    var_dump($account->getKeyPair()->getPublicKey("hex"));
-    var_dump($account->getKeyPair()->getPrivateKey("hex"));
-    var_dump($account->getPublicAccount()->getAddress());
-?>
+```go
+package main
+
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+)
+
+const alicePrivateKey = "04dd376196603c44a19fd500492e5de12de9ed353de070a788cb21f210645613"
+
+func main() {
+    aliceAccount, _ := sdk.NewAccountFromPrivateKey(alicePrivateKey, sdk.MijinTest)
+
+    fmt.Printf("Address:\t%v\n", aliceAccount.Address)
+    fmt.Printf("PrivateKey:\t%x\n", aliceAccount.KeyPair.PrivateKey.Raw)
+    fmt.Printf("PublicKey:\t%x", aliceAccount.KeyPair.PublicKey.Raw)
+}
 ```
 
