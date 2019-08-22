@@ -11,7 +11,6 @@ import (
     "context"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "time"
 )
 
 const (
@@ -61,7 +60,6 @@ package main
 
 import (
     "context"
-    "time"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
@@ -72,7 +70,7 @@ const (
     // Types of network.
     networkType = sdk.MijinTest
     // Valid uint 32 nonce
-    nonce = ...
+    nonce = 1234
     // Valid public key of mosaic owner
     publicKey = "F5F090D5EC24E572CC9D4EC3B891D8C4435E986620CB38B003EA19EAD13AC724"
     // Valid key which is used to store metadata in address
@@ -123,9 +121,9 @@ func main() {
 ```go
 package main
 
+
 import (
     "context"
-    "time"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
