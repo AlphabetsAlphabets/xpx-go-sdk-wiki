@@ -156,7 +156,7 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    transactions, err := client.Account.Transactions(context.Background(), account)
+    transactions, err := client.Account.Transactions(context.Background(), account, nil)
     if err != nil {
         fmt.Printf("Account.Transactions returned error: %s", err)
         return
@@ -268,7 +268,7 @@ func main() {
     }
 
     // Get confirmed transactions information.
-    transactions, err := client.Account.OutgoingTransactions(context.Background(), account)
+    transactions, err := client.Account.OutgoingTransactions(context.Background(), account, nil)
     if err != nil {
         fmt.Printf("Account.OutgoingTransactions returned error: %s", err)
         return
@@ -325,7 +325,7 @@ func main() {
 
     // Get confirmed transactions information.
     // Param account - A PublicAccount struct
-    transactions, err := client.Account.UnconfirmedTransactions(context.Background(), account)
+    transactions, err := client.Account.UnconfirmedTransactions(context.Background(), account, nil)
     if err != nil {
         fmt.Printf("Account.UnconfirmedTransactions returned error: %s", err)
         return
@@ -371,7 +371,7 @@ func main() {
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
-    multisig, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    multisig, err := sdk.NewAccountFromPublicKey(multisigPublicKey, networkType)
     if err != nil {
         fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
         return
