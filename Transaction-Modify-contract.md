@@ -53,32 +53,32 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    customer, err := sdk.NewAccountFromPrivateKey(customerPrivateKey, networkType)
+    customer, err := sdk.NewAccountFromPrivateKey(customerPrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    contract, err := sdk.NewAccountFromPrivateKey(contractPrivateKey, networkType)
+    contract, err := sdk.NewAccountFromPrivateKey(contractPrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    replicator1, err := sdk.NewAccountFromPrivateKey(replicator1PrivateKey, networkType)
+    replicator1, err := sdk.NewAccountFromPrivateKey(replicator1PrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    replicator2, err := sdk.NewAccountFromPrivateKey(replicator2PrivateKey, networkType)
+    replicator2, err := sdk.NewAccountFromPrivateKey(replicator2PrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    verificator1, err := sdk.NewAccountFromPrivateKey(verificator1PrivateKey, networkType)
+    verificator1, err := sdk.NewAccountFromPrivateKey(verificator1PrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    verificator2, err := sdk.NewAccountFromPrivateKey(verificator2PrivateKey, networkType)
+    verificator2, err := sdk.NewAccountFromPrivateKey(verificator2PrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return

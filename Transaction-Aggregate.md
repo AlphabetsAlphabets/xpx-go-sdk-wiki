@@ -40,12 +40,12 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    firstAccount, err := sdk.NewAccountFromPrivateKey(firstPrivateKey , networkType)
+    firstAccount, err := sdk.NewAccountFromPrivateKey(firstPrivateKey , networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    secondAccount, err := sdk.NewAccountFromPrivateKey(secondPrivateKey , networkType)
+    secondAccount, err := sdk.NewAccountFromPrivateKey(secondPrivateKey , networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return

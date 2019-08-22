@@ -52,7 +52,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    multisig, err := sdk.NewAccountFromPrivateKey(multisigPrivateKey , networkType)
+    multisig, err := sdk.NewAccountFromPrivateKey(multisigPrivateKey , networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -157,23 +157,23 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    multisig, err := sdk.NewAccountFromPrivateKey(multisigPrivateKey , networkType)
+    multisig, err := sdk.NewAccountFromPrivateKey(multisigPrivateKey , networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
-    cosignerOne, err := sdk.NewAccountFromPrivateKey(cosignatoryOnePrivateKey, networkType)
+    cosignerOne, err := sdk.NewAccountFromPrivateKey(cosignatoryOnePrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    cosignerTwo, err := sdk.NewAccountFromPrivateKey(cosignatoryTwoPrivateKey, networkType)
+    cosignerTwo, err := sdk.NewAccountFromPrivateKey(cosignatoryTwoPrivateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    cosignerToRemove, err := sdk.NewAccountFromPrivateKey(cosignatoryToRemovePublicKey , networkType)
+    cosignerToRemove, err := sdk.NewAccountFromPrivateKey(cosignatoryToRemovePublicKey , networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return

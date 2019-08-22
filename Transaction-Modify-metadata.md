@@ -48,7 +48,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -143,7 +143,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -249,7 +249,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType)
+    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
