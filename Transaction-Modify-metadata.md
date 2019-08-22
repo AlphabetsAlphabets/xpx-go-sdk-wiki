@@ -30,6 +30,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // Valid private key
@@ -48,14 +50,14 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
     // Create a modify metadata transaction
-    transaction, err := sdk.NewModifyMetadataAddressTransaction(
+    transaction, err := client.NewModifyMetadataAddressTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
         // Address where metadata should be attached
@@ -71,7 +73,6 @@ func main() {
                 "my_data",
             },
         },
-        networkType,
     )
 
     if err != nil {
@@ -125,6 +126,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // Valid private key
@@ -143,7 +146,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -229,6 +232,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // Valid private key
@@ -249,7 +254,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an accounts from a private keys
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -263,7 +268,7 @@ func main() {
     }
 
     // Create a modify metadata transaction
-    transaction, err := sdk.NewModifyMetadataNamespaceTransaction(
+    transaction, err := client.NewModifyMetadataNamespaceTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
         // Id of namespace where metadata should be added
@@ -279,7 +284,6 @@ func main() {
                 "my_data",
             },
         },
-        networkType,
     )
 
     if err != nil {
