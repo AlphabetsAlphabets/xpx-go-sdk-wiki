@@ -13,6 +13,7 @@ owner. If valid, it will be included in a block.
 ```go
 package main
 
+
 import (
     "context"
     "fmt"
@@ -21,12 +22,12 @@ import (
 )
 
 const (
-    // Types of network.
-    networkType = sdk.MijinTest
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Addresses for transfer
-    firstAddressToTransfer = "SCW2KXPU3MCFUASDJAWFPOYYXQHFX76ESSX4QXDN"
+    firstAddressToTransfer  = "SCW2KXPU3MCFUASDJAWFPOYYXQHFX76ESSX4QXDN"
     secondAddressToTransfer = "SCTJXIHO62UZDNA3A3RHQUXP3EWXMCUGWSJAV2CM"
 )
 
@@ -42,23 +43,22 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    account, err := sdk.NewAccountFromPrivateKey(privateKey , networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
     // Create a new transfer type transaction
-    firstTransferTransaction, err := sdk.NewTransferTransaction(
+    firstTransferTransaction, err := client.NewTransferTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        time.NewDeadline(time.Hour * 1),
+        sdk.NewDeadline(time.Hour*1),
         // The address of the recipient account.
-        sdk.NewAddress(firstAddressToTransfer, networkType),
+        sdk.NewAddress(firstAddressToTransfer, client.NetworkType()),
         // The array of mosaic to be sent.
         []*sdk.Mosaic{sdk.Xpx(10)},
         // The transaction message of 1024 characters.
         sdk.NewPlainMessage(""),
-        networkType,
     )
     if err != nil {
         fmt.Printf("NewTransferTransaction returned error: %s", err)
@@ -66,16 +66,15 @@ func main() {
     }
 
     // Create a new transfer type transaction
-    secondTransferTransaction, err := sdk.NewTransferTransaction(
+    secondTransferTransaction, err := client.NewTransferTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        time.NewDeadline(time.Hour * 1),
+        sdk.NewDeadline(time.Hour*1),
         // The address of the recipient account.
-        sdk.NewAddress(secondAddressToTransfer, networkType),
+        sdk.NewAddress(secondAddressToTransfer, client.NetworkType()),
         // The array of mosaic to be sent.
         []*sdk.Mosaic{sdk.Xpx(10)},
         // The transaction message of 1024 characters.
         sdk.NewPlainMessage(""),
-        networkType,
     )
     if err != nil {
         fmt.Printf("NewTransferTransaction returned error: %s", err)
@@ -87,12 +86,11 @@ func main() {
     secondTransferTransaction.ToAggregate(account.PublicAccount)
 
     // Create an aggregate complete transaction
-    aggregateTransaction, err := sdk.NewCompleteAggregateTransaction(
+    aggregateTransaction, err := client.NewCompleteAggregateTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        sdk.NewDeadline(time.Hour * 1),
+        sdk.NewDeadline(time.Hour*1),
         // Inner transactions
         []sdk.Transaction{firstTransferTransaction, secondTransferTransaction},
-        networkType
     )
     if err != nil {
         fmt.Printf("NewCompleteAggregateTransaction returned error: %s", err)
