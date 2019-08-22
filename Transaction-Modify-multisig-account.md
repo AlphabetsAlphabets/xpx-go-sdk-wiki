@@ -28,8 +28,6 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
     // Future multisig private key
     multisigPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Cosignature public keys

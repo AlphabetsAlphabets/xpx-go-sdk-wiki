@@ -36,8 +36,8 @@ import (
 )
 
 const (
-    // Types of network.
-    networkType = sdk.MijinTest
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // A valid private key
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
@@ -54,7 +54,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
@@ -64,10 +64,10 @@ func main() {
     nonce := random.Uint32()
 
     // Create a new mosaic definition type transaction
-    transaction, err := sdk.NewMosaicDefinitionTransaction(
+    transaction, err := client.NewMosaicDefinitionTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
-        // TODO
+        // Mosaic nonce
         nonce,
         // Public key of mosaic owner
         account.PublicAccount.PublicKey,
@@ -76,14 +76,11 @@ func main() {
             true,
             // transferability
             true,
-            // TODO
-            true,
             // divisibility
             4,
             // duration
-            sdk.Duration(10000)
+            sdk.Duration(10000),
         ),
-        networkType
     )
     if err != nil {
         fmt.Printf("NewMosaicDefinitionTransaction returned error: %s", err)
@@ -98,7 +95,7 @@ func main() {
     }
 
     // Announce transaction
-    _, err := client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
