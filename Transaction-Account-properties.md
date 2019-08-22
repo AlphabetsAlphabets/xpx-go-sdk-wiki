@@ -31,6 +31,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // A valid private key
@@ -55,7 +57,7 @@ func main() {
         return
     }
     // Create an account for blocking
-    accountToBlock, err := sdk.NewAccount(networkType)
+    accountToBlock, err := sdk.NewAccount(networkType, client.GenerationHash())
     if err != nil {
         fmt.Printf("NewAccount returned error: %s", err)
         return
@@ -124,6 +126,7 @@ This is done via a **NewAccountPropertiesMosaicTransaction()**.
 ```go
 package main
 
+
 import (
     "context"
     "fmt"
@@ -133,6 +136,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // A valid private key
@@ -206,6 +211,7 @@ func main() {
     time.Sleep(time.Second * 30)
 
 }
+
 ```
 
 #### Entity
@@ -248,6 +254,7 @@ This is done via a **NewAccountPropertiesEntityTypeTransaction()**.
 ```go
 package main
 
+
 import (
     "context"
     "fmt"
@@ -256,6 +263,8 @@ import (
 )
 
 const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
     // A valid private key
@@ -321,3 +330,4 @@ func main() {
 
 }
 ```
+
