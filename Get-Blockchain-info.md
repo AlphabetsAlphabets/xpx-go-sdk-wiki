@@ -8,7 +8,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
@@ -52,7 +51,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
@@ -100,7 +98,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
@@ -151,7 +148,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
@@ -197,7 +193,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
@@ -238,7 +233,6 @@ import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
-    "time"
 )
 
 const (
