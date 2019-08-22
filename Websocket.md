@@ -32,7 +32,7 @@ const (
 func main() {
 
     // Testnet config default
-    conf, err := sdk.NewConfig(baseUrl,networkType)
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }

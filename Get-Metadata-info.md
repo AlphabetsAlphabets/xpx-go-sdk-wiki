@@ -27,7 +27,7 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         fmt.Printf("NewConfig returned error: %s", err)
         return
@@ -81,7 +81,7 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         fmt.Printf("NewConfig returned error: %s", err)
         return
@@ -143,7 +143,7 @@ const (
 
 func main() {
 
-    conf, err := sdk.NewConfig(baseUrl, networkType, time.Second * 10)
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         fmt.Printf("NewConfig returned error: %s", err)
         return
