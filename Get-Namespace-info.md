@@ -10,7 +10,6 @@ package main
 import (
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "time"
     "context"
 )
 
@@ -57,7 +56,6 @@ package main
 
 import (
     "fmt"
-    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -109,9 +107,9 @@ func main() {
 ```go
 package main
 
+
 import (
     "fmt"
-    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -170,7 +168,6 @@ package main
 
 import (
     "fmt"
-    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
