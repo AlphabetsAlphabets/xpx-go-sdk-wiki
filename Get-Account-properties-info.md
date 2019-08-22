@@ -7,7 +7,6 @@
 package main
 
 import (
-    "time"
     "context"
     "fmt"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
