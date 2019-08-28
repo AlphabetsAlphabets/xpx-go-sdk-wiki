@@ -18,6 +18,7 @@ account or edit it's properties. This is done via a
 ```go
 package main
 
+
 import (
     "context"
     "fmt"
@@ -31,8 +32,8 @@ const (
     // Future multisig private key
     multisigPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Cosignature public keys
-    cosignatoryOnePublicKey = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
-    cosignatoryTwoPublicKey = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
+    cosignatoryOnePublicKey   = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
+    cosignatoryTwoPublicKey   = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
     cosignatoryThreePublicKey = "29CF06338133DEE64FC49BCB19C8936916DBE8DC461CE489BF9588BE3B9670B5"
     // Minimal approval count
     minimalApproval = 3
@@ -76,16 +77,16 @@ func main() {
 
     transaction, err := client.NewModifyMultisigAccountTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
-        sdk.NewDeadline(time.Hour * 1),
+        sdk.NewDeadline(time.Hour*1),
         // The number of signatures needed to approve a transaction.
         minimalApproval,
         // The number of signatures needed to remove a cosignatory.
         minimalRemoval,
         // Array of cosigner accounts added or removed from the multisignature account.
         []*sdk.MultisigCosignatoryModification{
-            {sdk.Add, cosignerOne,},
-            {sdk.Add, cosignerTwo,},
-            {sdk.Add, cosignerThree,},
+            {sdk.Add, cosignerOne},
+            {sdk.Add, cosignerTwo},
+            {sdk.Add, cosignerThree},
         },
     )
     if err != nil {

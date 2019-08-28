@@ -34,7 +34,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Get mosaic information.
-    mosaic, err := client.Mosaic.GetMosaicInfo(context.Background(), sdk.XpxMosaicId)
+    mosaic, err := client.Mosaic.GetMosaicInfo(context.Background(), sdk.XpxMosaicId) // TODO FIX
     if err != nil {
         fmt.Printf("Mosaic.GetMosaicInfo returned error: %s", err)
         return
@@ -53,7 +53,6 @@ package main
 
 import (
     "fmt"
-    "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
     "context"
 )
@@ -78,7 +77,7 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Get mosaic information.
-    mosaics, err := client.Mosaic.GetMosaicInfos(context.Background(), []*sdk.MosaicId{sdk.XpxMosaicId, sdk.XemMosaicId})
+    mosaics, err := client.Mosaic.GetMosaicInfos(context.Background(), []*sdk.MosaicId{sdk.XpxMosaicId, sdk.XemMosaicId}) // TODO FIX
     if err != nil {
         fmt.Printf("Mosaic.GetMosaicInfos returned error: %s", err)
         return
