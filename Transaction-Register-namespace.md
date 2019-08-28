@@ -8,17 +8,17 @@
 ```go
 package main
 
+
 import (
     "context"
     "fmt"
-    "math/big"
     "time"
     "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
 )
 
 const (
-    // Types of network.
-    networkType = sdk.MijinTest
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // A valid private key
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Name of namespace to create
@@ -37,21 +37,20 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
     // Create a new namespace type transaction
-    transaction, err := sdk.NewRegisterRootNamespaceTransaction(
+    transaction, err := client.NewRegisterRootNamespaceTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
         // Name of namespace
         namespaceName,
         // Duration of namespace life in blocks
         sdk.Duration(10000),
-        networkType,
     )
     if err != nil {
         fmt.Printf("NewRegisterRootNamespaceTransaction returned error: %s", err)
@@ -92,8 +91,8 @@ import (
 )
 
 const (
-    // Types of network.
-    networkType = sdk.MijinTest
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
     // A valid private key
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Name of namespace to create
@@ -114,28 +113,27 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    account, err := sdk.NewAccountFromPrivateKey(privateKey, networkType, client.GenerationHash())
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
     // Create parent namespace id
-    parentnamespaceId, err := sdk.NewNamespaceIdFromName(parentNamespaceName)
+    parentNamespaceId, err := sdk.NewNamespaceIdFromName(parentNamespaceName)
     if err != nil {
         fmt.Printf("NewNamespaceIdFromName returned error: %s", err)
         return
     }
 
     // Create a new namespace type transaction
-    transaction, err := sdk.NewRegisterSubNamespaceTransaction(
+    transaction, err := client.NewRegisterSubNamespaceTransaction(
         // The maximum amount of time to include the transaction in the blockchain.
         sdk.NewDeadline(time.Hour * 1),
         // Name of namespace
         subNamespaceName,
         // Parent namespace id
         parentNamespaceId,
-        networkType,
     )
     if err != nil {
         fmt.Printf("NewRegisterSubNamespaceTransaction returned error: %s", err)
