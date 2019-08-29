@@ -19,14 +19,7 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
 )
 
 func main() {
@@ -44,7 +37,7 @@ func main() {
     }
 
     // add handler
-    err = wsClient.AddBlockHandler(func (info *sdk.BlockInfo) bool {
+    err = wsClient.AddBlockHandlers(func (info *sdk.BlockInfo) bool {
         fmt.Printf("Block received with height: %v \n", info.Height)
         return true
     })
@@ -72,31 +65,21 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
@@ -104,9 +87,15 @@ func main() {
         panic(err)
     }
 
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
+    if err != nil {
+        panic(err)
+    }
+
     // add handler
     err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
-        fmt.Printf("ConfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+        fmt.Printf("ConfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().TransactionHash)
         return true
     })
     if err != nil {
@@ -133,31 +122,21 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
@@ -165,9 +144,15 @@ func main() {
         panic(err)
     }
 
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
+    if err != nil {
+        panic(err)
+    }
+
     // add handler
     err = wsClient.AddUnconfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
-        fmt.Printf("UnconfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+        fmt.Printf("UnconfirmedAdded Tx Hash: %v \n", info.GetAbstractTransaction().TransactionHash)
         return true
     })
     if err != nil {
@@ -185,6 +170,7 @@ The partial added channel notifies when an aggregate bonded transaction related 
 ```go
 package main
 
+
 import (
     "fmt"
     "context"
@@ -194,31 +180,21 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
@@ -226,9 +202,15 @@ func main() {
         panic(err)
     }
 
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
+    if err != nil {
+        panic(err)
+    }
+
     // add handler
-    err = wsClient.AddPartialAddedHandlers(account.Address, func (info sdk.Transaction) bool {
-        fmt.Printf("PartialAdded Tx Hash: %v \n", info.GetAbstractTransaction().Hash)
+    err = wsClient.AddPartialAddedHandlers(account.Address, func (info *sdk.AggregateTransaction) bool {
+        fmt.Printf("PartialAdded Tx Hash: %v \n", info.GetAbstractTransaction().TransactionHash)
         return true
     })
     if err != nil {
@@ -246,6 +228,7 @@ The partial removed channel notifies when a transaction related to an address wa
 ```go
 package main
 
+
 import (
     "fmt"
     "context"
@@ -255,31 +238,21 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
@@ -287,9 +260,15 @@ func main() {
         panic(err)
     }
 
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
+    if err != nil {
+        panic(err)
+    }
+
     // add handler
-    err = wsClient.AddPartialRemovedHandlers(account.Address, func (info sdk.Transaction) bool {
-        fmt.Printf("PartialRemoved Tx Hash: %v \n", info.Meta.Hash)
+    err = wsClient.AddPartialRemovedHandlers(account.Address, func (info *sdk.PartialRemovedInfo) bool {
+        fmt.Printf("PartialRemoved Tx Hash: %v \n", info.Meta.TransactionHash)
         return true
     })
     if err != nil {
@@ -297,6 +276,7 @@ func main() {
     }
 
 }
+
 ```
 
 
@@ -316,34 +296,30 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         panic(err)
     }
@@ -378,34 +354,30 @@ import (
 
 const (
     // Catapult-api-rest server.
-    baseUrl = "ws://localhost:3000/ws"
-
-    // Types of network.
-    // MainNet:   104
-    // TestNet:   152
-    // Mijin:     96
-    // MijinTest: 144
-    networkType = sdk.MijinTest
+    baseUrl = "http://localhost:3000"
     // Valid private key
     privateKey  = "24CEC4F2DD1A28EBB2C0CF6D4D181BA2C0F1E215C42B9059EEFB65B1FAEE1B99"
 )
 
 func main() {
 
-    // Create account from private key
-    acc, err := sdk.NewAccount(privateKey, networkType)
+    // Testnet config default
+    config, err := sdk.NewConfig(context.Background(), []string{baseUrl})
     if err != nil {
         panic(err)
     }
 
-    // Testnet config default
-    config, err := sdk.NewConfig(baseUrl, networkType)
-    if err != nil {
-        panic(err)
-    }
+    // Use the default http client
+    client := sdk.NewClient(nil, config)
 
     // Create websocket client
     wsClient, err := websocket.NewClient(context.Background(), config)
+    if err != nil {
+        panic(err)
+    }
+
+    // Create account from private key
+    account, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         panic(err)
     }
