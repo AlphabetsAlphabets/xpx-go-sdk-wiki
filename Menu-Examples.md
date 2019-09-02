@@ -92,10 +92,6 @@
  - Announce a modify mosaic account properties transaction
  - Announce a modify entity account properties transaction
 
-### [Mofify contract transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-contract)
-
- - Announce a modify contract transaction
-
 ### [Modify metadata transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
 
  - Announce a modify account metadata transaction
