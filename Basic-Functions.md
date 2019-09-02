@@ -27,7 +27,7 @@ func main() {
   * TestNet = Test net network.
   * Mijin = Mijin net network.
   * MijinTest= Mijin test net network.
-* Return - A PublicAccount struct
+* Return - An Address struct
 
 ```go
 package main
@@ -40,7 +40,7 @@ import (
 func main() {
     publicKey := "04dd376196603c44a19fd500492e5de12de9ed353de070a788cb21f210645613"
 
-    Address, _ := sdk.NewAddressFromPublicKey(pk, sdk.MijinTest)
+    Address, _ := sdk.NewAddressFromPublicKey(publicKey, sdk.MijinTest)
 
     fmt.Printf("Address:\t\t%v\n",Address.Address)
     fmt.Printf("NetworkType:\t%v",Address.Type)
