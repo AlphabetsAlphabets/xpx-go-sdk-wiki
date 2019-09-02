@@ -16,7 +16,6 @@ This is done via a **NewMosaicDefinitionTransaction()**.
       - transferability - The creator can choose if the mosaic can be
       transferred to and from arbitrary accounts, or only allowing itself
       to be the recipient once transferred for the first time.
-      - levymutable - TODO
       - divisibility - Determines up to what decimal place the mosaic can
       be divided. Divisibility of 3 means that a mosaic can be divided
       into smallest parts of 0.001 mosaics. The divisibility must be in
