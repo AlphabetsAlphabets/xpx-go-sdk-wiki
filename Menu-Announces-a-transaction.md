@@ -38,12 +38,11 @@ which has the state unconfirmed.
 
 * Account properties transaction is used to update properties of account.
 
-### [Modify contract transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-contract)
-
-* Modify contract transaction is used to manage ProximaX storage contracts.
-
 ### [Modify metadata transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
 
 * Modify metadata transaction is used to update metadata for Account, Namespace or Mosaic.
 
+### [Alias transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Alias)
+
+* Alias transaction is used to link address or mosaic to namespace.
 #### Note: the connections to the server api are asynchronous and do not return the status of the transaction, to know the status you must use the websocket module of go-xpx-catapult-sdk.
