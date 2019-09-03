@@ -45,4 +45,9 @@ which has the state unconfirmed.
 ### [Alias transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Alias)
 
 * Alias transaction is used to link address or mosaic to namespace.
+
+### [Account link transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-link)
+
+* Account link is used to delegate own account's importance.
+
 #### Note: the connections to the server api are asynchronous and do not return the status of the transaction, to know the status you must use the websocket module of go-xpx-catapult-sdk.
