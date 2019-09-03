@@ -50,4 +50,8 @@ which has the state unconfirmed.
 
 * Account link is used to delegate own account's importance.
 
+### [Upgrade config](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Upgrade-config)
+
+* Upgrade config transactions used to upgrade network properties in runtime.
+
 #### Note: the connections to the server api are asynchronous and do not return the status of the transaction, to know the status you must use the websocket module of go-xpx-catapult-sdk.

@@ -24,4 +24,5 @@
     * [Modify metadata](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Modify-metadata)
     * [Alias](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Alias)
     * [Account link](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-link)
+    * [Upgrade config](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Upgrade-config)
   * [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)
