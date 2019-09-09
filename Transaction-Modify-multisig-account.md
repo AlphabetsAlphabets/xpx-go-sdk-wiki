@@ -30,11 +30,11 @@ const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
     // Future multisig private key
-    multisigPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+    multisigPublicKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Cosignature public keys
-    cosignatoryOnePublicKey   = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
-    cosignatoryTwoPublicKey   = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
-    cosignatoryThreePublicKey = "29CF06338133DEE64FC49BCB19C8936916DBE8DC461CE489BF9588BE3B9670B5"
+    cosignatoryOnePrivateKey   = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
+    cosignatoryTwoPrivateKey   = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
+    cosignatoryThreePrivateKey = "29CF06338133DEE64FC49BCB19C8936916DBE8DC461CE489BF9588BE3B9670B5"
     // Minimal approval count
     minimalApproval = 3
     // Minimal removal count
@@ -53,25 +53,25 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    multisig, err := client.NewAccountFromPrivateKey(multisigPrivateKey)
+    multisig, err := client.NewAccountFromPublicKey(multisigPublicKey)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
+
+    cosignerOne, err := client.NewAccountFromPrivateKey(cosignatoryOnePrivateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-
-    cosignerOne, err := client.NewAccountFromPublicKey(cosignatoryOnePublicKey)
+    cosignerTwo, err := client.NewAccountFromPrivateKey(cosignatoryTwoPrivateKey)
     if err != nil {
-        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
-    cosignerTwo, err := client.NewAccountFromPublicKey(cosignatoryTwoPublicKey)
+    cosignerThree, err := client.NewAccountFromPrivateKey(cosignatoryThreePrivateKey)
     if err != nil {
-        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
-        return
-    }
-    cosignerThree, err := client.NewAccountFromPublicKey(cosignatoryThreePublicKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
         return
     }
 
@@ -84,9 +84,9 @@ func main() {
         minimalRemoval,
         // Array of cosigner accounts added or removed from the multisignature account.
         []*sdk.MultisigCosignatoryModification{
-            {sdk.Add, cosignerOne},
-            {sdk.Add, cosignerTwo},
-            {sdk.Add, cosignerThree},
+            {sdk.Add, cosignerOne.PublicAccount},
+            {sdk.Add, cosignerTwo.PublicAccount},
+            {sdk.Add, cosignerThree.PublicAccount},
         },
     )
     if err != nil {
@@ -94,19 +94,95 @@ func main() {
         return
     }
 
+    // Convert transactions to inner for an aggregate transaction
+    transaction.ToAggregate(multisig)
+
+    aggregateBondedTransaction, err := client.NewBondedAggregateTransaction(sdk.NewDeadline(time.Hour), []sdk.Transaction{transaction})
+
     // Sign transaction
-    signedTransaction, err := multisig.Sign(transaction)
+    signedAggregateBoundedTransaction, err := cosignerOne.Sign(aggregateBondedTransaction)
+    if err != nil {
+        fmt.Printf("Sign returned error: %s", err)
+        return
+    }
+
+    // Create lock funds transaction for aggregate bounded
+    lockFundsTransaction, err := client.NewLockFundsTransaction(
+        // The maximum amount of time to include the transaction in the blockchain.
+        sdk.NewDeadline(time.Hour),
+        // Funds to lock
+        sdk.XpxRelative(10),
+        // Duration of lock transaction in blocks
+        sdk.Duration(1000),
+        // Aggregate bounded transaction for lock
+        signedAggregateBoundedTransaction,
+    )
+    if err != nil {
+        fmt.Printf("NewLockFundsTransaction returned error: %s", err)
+        return
+    }
+
+    // Sign transaction
+    signedLockFundsTransaction, err := cosignerOne.Sign(lockFundsTransaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
     }
 
     // Announce transaction
-    _, err = client.Transaction.Announce(context.Background(), signedTransaction)
+    _, err = client.Transaction.Announce(context.Background(), signedLockFundsTransaction)
     if err != nil {
         fmt.Printf("Transaction.Announce returned error: %s", err)
         return
     }
+
+    // Wait for lock funds transaction to be harvested
+    time.Sleep(30 * time.Second)
+
+    // Announce aggregate bounded transaction
+    _, _ = client.Transaction.AnnounceAggregateBonded(context.Background(), signedAggregateBoundedTransaction)
+    if err != nil {
+        fmt.Printf("Transaction.AnnounceAggregateBonded returned error: %s", err)
+        return
+    }
+
+    // Wait for aggregate bounded transaction to be harvested
+    time.Sleep(30 * time.Second)
+
+    // Create cosignature transaction from second account
+    secondAccountCosignatureTransaction := sdk.NewCosignatureTransactionFromHash(signedAggregateBoundedTransaction.Hash)
+    signedSecondAccountCosignatureTransaction, err := cosignerTwo.SignCosignatureTransaction(secondAccountCosignatureTransaction)
+    if err != nil {
+        fmt.Printf("SignCosignatureTransaction returned error: %s", err)
+        return
+    }
+
+    // Announce transaction
+    _, err = client.Transaction.AnnounceAggregateBondedCosignature(context.Background(), signedSecondAccountCosignatureTransaction)
+    if err != nil {
+        fmt.Printf("AnnounceAggregateBoundedCosignature returned error: %s", err)
+        return
+    }
+
+    // Create cosignature transaction from third account
+    thirdAccountCosignatureTransaction := sdk.NewCosignatureTransactionFromHash(signedAggregateBoundedTransaction.Hash)
+    signedThirdAccountCosignatureTransaction, err := cosignerThree.SignCosignatureTransaction(thirdAccountCosignatureTransaction)
+    if err != nil {
+        fmt.Printf("SignCosignatureTransaction returned error: %s", err)
+        return
+    }
+
+    // Announce transaction
+    _, err = client.Transaction.AnnounceAggregateBondedCosignature(context.Background(), signedThirdAccountCosignatureTransaction)
+    if err != nil {
+        fmt.Printf("AnnounceAggregateBoundedCosignature returned error: %s", err)
+        return
+    }
+    // wait for the transaction to be confirmed! (very important)
+    // you can use websockets to wait explicitly for transaction
+    // to be in certain state, instead of hard waiting
+    time.Sleep(30 * time.Second)
+
 }
 ```
 
@@ -127,7 +203,7 @@ const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
     // Existing multisig private key
-    multisigPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+    multisigPublicKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // Cosignature public keys
     cosignatoryOnePrivateKey = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
     cosignatoryTwoPrivateKey = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
@@ -150,9 +226,9 @@ func main() {
     client := sdk.NewClient(nil, conf)
 
     // Create an account from a private key
-    multisig, err := client.NewAccountFromPrivateKey(multisigPrivateKey)
+    multisig, err := client.NewAccountFromPublicKey(multisigPublicKey)
     if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
         return
     }
 
@@ -189,7 +265,7 @@ func main() {
         return
     }
     // Make modify multisig transaction part of aggregate bounded
-    transaction.ToAggregate(multisig.PublicAccount)
+    transaction.ToAggregate(multisig)
 
     // Create actual aggregate bounded transaction
     aggregateBoundedTransaction, err := client.NewBondedAggregateTransaction(
@@ -202,7 +278,7 @@ func main() {
     }
 
     // Sign it from multisig
-    signedAggregateBoundedTransaction, err := multisig.Sign(aggregateBoundedTransaction)
+    signedAggregateBoundedTransaction, err := cosignerOne.Sign(aggregateBoundedTransaction)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
@@ -225,7 +301,7 @@ func main() {
     }
 
     // Sign transaction
-    signedTransaction, err := multisig.Sign(lockFundsTrx)
+    signedTransaction, err := cosignerOne.Sign(lockFundsTrx)
     if err != nil {
         fmt.Printf("Sign returned error: %s", err)
         return
@@ -251,22 +327,6 @@ func main() {
     // Wait for aggregate bounded transaction to be harvested
     time.Sleep(30 * time.Second)
 
-
-    // Create cosignature transaction from first cosigner
-    signatureOneCosignatureTransaction := sdk.NewCosignatureTransactionFromHash(signedAggregateBoundedTransaction.Hash)
-    signedSignatureOneCosignatureTransaction, err := cosignerOne.SignCosignatureTransaction(signatureOneCosignatureTransaction)
-    if err != nil {
-        fmt.Printf("SignCosignatureTransaction returned error: %s", err)
-        return
-    }
-
-    // Announce transaction
-    _, err = client.Transaction.AnnounceAggregateBondedCosignature(context.Background(), signedSignatureOneCosignatureTransaction)
-    if err != nil {
-        fmt.Printf("AnnounceAggregateBoundedCosignature returned error: %s", err)
-        return
-    }
-
     // Create cosignature transaction from second cosigner
     signatureTwoCosignatureTransaction := sdk.NewCosignatureTransactionFromHash(signedAggregateBoundedTransaction.Hash)
     signedSignatureTwoCosignatureTransaction, err := cosignerTwo.SignCosignatureTransaction(signatureTwoCosignatureTransaction)
@@ -284,6 +344,5 @@ func main() {
 
     // Wait cosignature transaction to be harvested
     time.Sleep(30 * time.Second)
-}
 ```
 
