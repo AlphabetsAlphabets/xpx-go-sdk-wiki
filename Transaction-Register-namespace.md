@@ -41,19 +41,17 @@ func main() {
         return
     }
 
-    // Create a new transfer type transaction
-    transaction, err := client.NewTransferTransaction(
-        // The maximum amount of time to include the transaction in the blockchain.
-        sdk.NewDeadline(time.Hour * 1),
-        // The address of the recipient account.
-        sdk.NewAddress("SBILTA367K2LX2FEXG5TFWAS7GEFYAGY7QLFBYKC", client.NetworkType()),
-        // The array of mosaic to be sent.
-        []*sdk.Mosaic{sdk.Xpx(10000000)},
-        // The transaction message of 1024 characters.
-        sdk.NewPlainMessage("Here you go"),
+   // Create a new transfer type transaction
+   transaction, err := client.NewRegisterRootNamespaceTransaction(
+	// The maximum amount of time to include the transaction in the blockchain.
+	sdk.NewDeadline(time.Hour * 1),
+	// The namespace Name.
+	"newnamespace",
+	// The duration per block.
+	sdk.Duration(10),
     )
     if err != nil {
-        fmt.Printf("NewTransferTransaction returned error: %s", err)
+        fmt.Printf("NewRegisterRootNamespaceTransaction returned error: %s", err)
         return
     }
 
