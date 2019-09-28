@@ -41,7 +41,7 @@ func main() {
         return
     }
 
-   // Create a new transfer type transaction
+   // Create a new register root-Namespace type transaction
    transaction, err := client.NewRegisterRootNamespaceTransaction(
 	// The maximum amount of time to include the transaction in the blockchain.
 	sdk.NewDeadline(time.Hour * 1),
