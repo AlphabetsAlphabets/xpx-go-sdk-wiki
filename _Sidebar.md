@@ -12,6 +12,7 @@
   * [Get Network info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Network-info)
   * [Get Metadata info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Metadata-info)
   * [Get Account Properties info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Account-properties-info)
+  * [Get Exchange Offer](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Get-Exchange-Offer)
   * [Announces a transaction](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Menu-Announces-a-transaction)
     * [Transfer](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Transfer)
     * [Register namespace](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Register-namespace)
@@ -25,4 +26,5 @@
     * [Alias](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Alias)
     * [Account link](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-link)
     * [Upgrade config](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Upgrade-config)
+    * [Exchange](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Exchange)
   * [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)

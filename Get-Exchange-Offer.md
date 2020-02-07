@@ -2,8 +2,7 @@
 Returns `UserExchangeInfo` of an account.
 
 Following parameters required:
- - PublicAccount - PublicAccount of some account
-
+ - **PublicAccount** - PublicAccount of some account
 
 ```go
 package main
@@ -55,8 +54,8 @@ func main() {
 Returns `OffersInfo` of an account.
 
 Following parameters required:
- - assetId - assetId of some mosaic
- - type - offer type 
+ - **assetId** - assetId of some mosaic
+ - **type** - offer type 
 
  ```go
  package main
