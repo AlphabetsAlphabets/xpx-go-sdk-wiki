@@ -10,8 +10,7 @@ package main
 import (
     "context"
     "fmt"
-    "time"
-    
+
     "github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
@@ -41,11 +40,11 @@ func main() {
 
     // Get user offers info
     userExchangeInfo, err := client.Exchange.GetAccountExchangeInfo(context.Background(), accountSeller.PublicAccount)
-	if err != nil {
+    if err != nil {
         fmt.Printf("Exchange.GetAccountExchangeInfo returned error: %s", err)
         return
     }
-    
+
     println(userExchangeInfo.String())
 }
 ```
@@ -58,7 +57,7 @@ Following parameters required:
  - **type** - offer type 
 
  ```go
- package main
+package main
 
 import (
     "context"
