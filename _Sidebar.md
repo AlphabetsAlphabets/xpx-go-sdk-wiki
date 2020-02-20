@@ -27,4 +27,6 @@
     * [Account link](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-link)
     * [Upgrade config](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Upgrade-config)
     * [Exchange](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Exchange)
+    * [Secret lock](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Lock-secret)
+    * [Service](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Service)
   * [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)
