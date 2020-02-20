@@ -5,14 +5,14 @@ Transaction below requires different mosaics, so during the execution going on e
 Prepare Drive Transaction is used to create a new drive. For creating use **NewPrepareDriveTransaction()**
 
 Following parameters is required:
-    - **Owner** - drive creator
-    - **Duration** - drive duration (in blocks)
-    - **BillingPeriod** - payment frequency (in blocks)
-    - **BillingPrice** - cost of one billing period (in SO)
-    - **StorageSize** - size of drive (in MB)
-    - **Replicas** - necessary count of drive copy
-    - **MinReplicators** - minimal amount of replicators
-    - **PercentApprovers** - percent approvers for confirming any drive transaction
+- **Owner** - drive creator
+- **Duration** - drive duration (in blocks)
+- **BillingPeriod** - payment frequency (in blocks)
+- **BillingPrice** - cost of one billing period (in SO)
+- **StorageSize** - size of drive (in MB)
+- **Replicas** - necessary count of drive copy
+- **MinReplicators** - minimal amount of replicators
+- **PercentApprovers** - percent approvers for confirming any drive transaction
 
 ```go
 package main
