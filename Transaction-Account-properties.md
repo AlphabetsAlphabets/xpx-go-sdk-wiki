@@ -35,7 +35,7 @@ const (
     baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
@@ -140,7 +140,7 @@ const (
     baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
@@ -267,7 +267,7 @@ const (
     baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 

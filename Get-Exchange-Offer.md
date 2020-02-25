@@ -1,5 +1,5 @@
 ### Get account's exchange offers
-Returns `UserExchangeInfo` of an account.
+Returns `UserExchangeInfo` of an account. 
 
 Following parameters required:
  - **PublicAccount** - PublicAccount of some account
@@ -17,7 +17,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
@@ -31,7 +31,7 @@ func main() {
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
-    // Create an account that add a new exchange offer from
+    //Account from private key
     accountSeller, err := client.NewAccountFromPrivateKey(privateKey)
     if err != nil {
         fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
@@ -81,15 +81,14 @@ func main() {
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
-    offerType := sdk.SellOffer
-    mosaic := sdk.Storage(10000000)
+    offerType := sdk.SellOffer //or sdk.BuyOffer
     
-    // Get user offers info
-    offersInfo, err := client.Exchange.GetExchangeOfferByAssetId(context.Background(), mosaic.AssetId, offerType)
-    if err != nil {
-        fmt.Printf("Exchange.GetExchangeOfferByAssetId returned error: %s", err)
-        return
-    }
+    // Get offers info by namespaceId (assetId)
+	offersInfo, err := client.Exchange.GetExchangeOfferByAssetId(context.Background(), sdk.StorageNamespaceId, offerType)
+	if err != nil {
+		fmt.Printf("Exchange.GetExchangeOfferByAssetId returned error: %s", err)
+		return
+	}
     
     fmt.Println(offersInfo)
 }

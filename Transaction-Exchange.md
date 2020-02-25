@@ -20,7 +20,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key
+	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
 )
 
@@ -137,7 +137,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key
+	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
 )
 
@@ -146,7 +146,7 @@ var timeout = time.Minute*5
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	
+
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
 	if err != nil {
 		fmt.Printf("NewConfig returned error: %s", err)
@@ -163,10 +163,8 @@ func main() {
 	}
 
 	defer wsClient.Close()
-	go func() {
-		//start listen websocket
-		wsClient.Listen()
-	}()
+	//start listen websocket
+	go wsClient.Listen()
 
 	// Create an account that add a new exchange offer from
 	accountSeller, err := client.NewAccountFromPrivateKey(privateKey)
@@ -175,6 +173,10 @@ func main() {
 		return
 	}
 
+	//-------------------
+	// Create a new offer
+	//-------------------
+	
 	// Create an account for make exchange with the new offer
 	accountBuyer, err := client.NewAccount()
 	if err != nil {
@@ -185,77 +187,13 @@ func main() {
 	//create chan for message
 	ch := make(chan string)
 
-	// add handler to wait while exchange will be created
-	if err = wsClient.AddConfirmedAddedHandlers(accountSeller.Address, func (info sdk.Transaction) bool {
-		ch <- "Created!"
-
-		return true
-	}); err != nil {
-		panic(err)
-	}
-
 	offerType := sdk.SellOffer
-	mosaic := sdk.Storage(10000000)
 
-	// Send a new NewAddExchangeOfferTransaction
-	transaction, err := client.NewAddExchangeOfferTransaction(
-		// The maximum amount of time to include the transaction in the blockchain.
-		sdk.NewDeadline(time.Hour),
-		// Array of new offers
-		[]*sdk.AddOffer{
-			{
-				sdk.Offer{
-					Type:   offerType,
-					Mosaic: mosaic,
-					Cost:   sdk.Amount(10000000),
-				},
-				sdk.Duration(10),
-			},
-		},
-	)
+	offerInfo, err := client.Exchange.GetExchangeOfferByAssetId(ctx, sdk.StorageNamespaceId, offerType)
 	if err != nil {
-		fmt.Printf("NewAccountPropertiesAddressTransaction returned error: %s", err)
+		fmt.Printf("Exchange.GetExchangeOfferByAssetId returned error: %s", err)
 		return
 	}
-
-	//sign transaction
-	signedTransaction, err := accountSeller.Sign(transaction)
-	if err != nil {
-		fmt.Printf("Sign returned error: %s", err)
-		return
-	}
-
-	// Announce transaction
-	_, err = client.Transaction.Announce(ctx, signedTransaction)
-	if err != nil {
-		fmt.Printf("Transaction.Announce returned error: %s", err)
-		return
-	}
-
-	//wait message. If didn't get a message after timeout then panic
-	select {
-	case msg := <-ch:
-		println(msg)
-	case <-ctx.Done():
-		panic(errors.New("Did not create"))
-	}
-
-	// Get user offers info
-	userExchangeInfo, err := client.Exchange.GetAccountExchangeInfo(ctx, accountSeller.PublicAccount)
-	if err != nil {
-		fmt.Printf("Exchange.GetAccountExchangeInfo returned error: %s", err)
-		return
-	}
-
-	// Get mosaic info
-	mosaicInfo, err := client.Resolve.GetMosaicInfoByAssetId(ctx, mosaic.AssetId)
-	if err != nil {
-		fmt.Printf("Resolve.GetMosaicInfoByAssetId returned error: %s", err)
-		return
-	}
-
-	// Get offer info by mosaicId
-	offerInfo := userExchangeInfo.Offers[offerType][*mosaicInfo.MosaicId]
 
 	// add handler to wait while exchange will be created
 	if err = wsClient.AddConfirmedAddedHandlers(accountBuyer.Address, func (info sdk.Transaction) bool {
@@ -266,7 +204,7 @@ func main() {
 		panic(err)
 	}
 
-	//send mosaics to boyer
+	//send mosaics to buyer
 	txToBuyer, err := client.NewTransferTransaction(
 		sdk.NewDeadline(time.Hour),
 		accountBuyer.Address,
@@ -297,7 +235,7 @@ func main() {
 	}
 
 	// Create a new confirmation with the mosaic amount
-	confirmation, err := offerInfo.ConfirmOffer(2)
+	confirmation, err := offerInfo[0].ConfirmOffer(2)
 	if err != nil {
 		fmt.Printf("ConfirmOffer returned error: %s", err)
 		return
@@ -346,23 +284,24 @@ Exchange Offer Transaction is used to make exchange. For creating use **NewExcha
 Following parameters required:
 - **RemoveOffer** - An array of offers to removing.
 
+Before starting use example [to create a new exchange offer](#add-exchange-offer-transaction)
 ```go
 package main
 
 import (
-"context"
-"fmt"
-"github.com/pkg/errors"
-"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
-"time"
+	"context"
+	"fmt"
+	"github.com/pkg/errors"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
+	"time"
 
-"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key
+	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
 )
 
@@ -388,10 +327,8 @@ func main() {
 	}
 
 	defer wsClient.Close()
-	go func() {
-		//start listen websocket
-		wsClient.Listen()
-	}()
+	//start listen websocket
+	go wsClient.Listen()
 
 	// Create an account that add a new exchange offer from
 	account, err := client.NewAccountFromPrivateKey(privateKey)
@@ -402,62 +339,9 @@ func main() {
 
 	//create chan for message
 	ch := make(chan string)
-
-	// add handler to wait while exchange will be created
-	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
-		ch <- "Created!"
-
-		return true
-	}); err != nil {
-		panic(err)
-	}
-
+	
 	offerType := sdk.SellOffer
-	mosaic := sdk.Storage(10000000)
-
-	// Send a new NewAddExchangeOfferTransaction
-	transaction, err := client.NewAddExchangeOfferTransaction(
-		// The maximum amount of time to include the transaction in the blockchain.
-		sdk.NewDeadline(time.Hour),
-		// Array of new offers
-		[]*sdk.AddOffer{
-			{
-				sdk.Offer{
-					Type:   offerType,
-					Mosaic: mosaic,
-					Cost:   sdk.Amount(10000000),
-				},
-				sdk.Duration(10),
-			},
-		},
-	)
-	if err != nil {
-		fmt.Printf("NewAccountPropertiesAddressTransaction returned error: %s", err)
-		return
-	}
-
-	//sign transaction
-	signedTransaction, err := account.Sign(transaction)
-	if err != nil {
-		fmt.Printf("Sign returned error: %s", err)
-		return
-	}
-
-	// Announce transaction
-	_, err = client.Transaction.Announce(ctx, signedTransaction)
-	if err != nil {
-		fmt.Printf("Transaction.Announce returned error: %s", err)
-		return
-	}
-
-	//wait message. If didn't get a message after timeout then panic
-	select {
-	case msg := <-ch:
-		println(msg)
-	case <-ctx.Done():
-		panic(errors.New("Did not create"))
-	}
-
+	
 	// add handler to wait while exchange will be created
 	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
 		ch <- "Removed!"
@@ -485,7 +369,7 @@ func main() {
 		fmt.Printf("Sign returned error: %s", err)
 		return
 	}
-	
+
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedExchangeTransaction)
 	if err != nil {

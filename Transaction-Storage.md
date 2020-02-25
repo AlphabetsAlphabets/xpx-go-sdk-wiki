@@ -18,20 +18,20 @@ Following parameters is required:
 package main
 
 import (
-    "context"
-    "fmt"
-    "sync"
-    "time"
+	"context"
+	"fmt"
+	"sync"
+	"time"
 
-    "github.com/proximax-storage/go-xpx-chain-sdk/sdk"
-    "github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // A valid private key
-    privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
+	// Catapult-api-rest server.
+	baseUrl = "http://localhost:3000"
+	// Private key of some exist account
+	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 )
 
 var timeout = time.Minute*4
@@ -41,98 +41,79 @@ var client *sdk.Client
 var wsClient websocket.CatapultClient
 
 func main() {
-    ctx, cancel := context.WithTimeout(context.Background(), timeout)
-    defer cancel()
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
 
-    conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
+	handleError(err)
 
-    // Use the default http client
-    client = sdk.NewClient(nil, conf)
+	// Use the default http client
+	client = sdk.NewClient(nil, conf)
 
-    // Create websocket client
-    wsClient, err = websocket.NewClient(ctx, conf)
-    if err != nil {
-        panic(err)
-    }
+	// Create websocket client
+	wsClient, err = websocket.NewClient(ctx, conf)
+	handleError(err)
 
-    defer wsClient.Close()
-    // Create an owner
-    owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+	defer wsClient.Close()
+	// Create an owner
+	owner, err := client.NewAccountFromPrivateKey(privateKey)
+	handleError(err)
 
-    // Create a new drive account
-    driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+	// Create a new drive account
+	driveAccount, err := client.NewAccount()
+	handleError(err)
 
-    // Prepare a new drive
-    driveTx, err := client.NewPrepareDriveTransaction(
-        sdk.NewDeadline(time.Hour),
-        owner.PublicAccount,
-        sdk.Duration(1000),
-        sdk.Duration(100),
-        sdk.Amount(500),
-        sdk.StorageSize(1000),
-        3,
-        1,
-        67,
+	// Prepare a new drive
+	driveTx, err := client.NewPrepareDriveTransaction(
+		sdk.NewDeadline(time.Hour),
+		owner.PublicAccount,
+		sdk.Duration(1000),
+		sdk.Duration(100),
+		sdk.Amount(500),
+		sdk.StorageSize(1000),
+		3,
+		1,
+		67,
+	)
+	handleError(err)
+	//Aggregate
+	driveTx.ToAggregate(driveAccount.PublicAccount)
+
+	//Create NewBondedAggregateTransaction
+	aggTx, err := client.NewCompleteAggregateTransaction(
+		sdk.NewDeadline(time.Hour),
+		[]sdk.Transaction{driveTx},
     )
-    if err != nil {
-        fmt.Printf("NewPrepareDriveTransaction returned error: %s", err)
-        return
-    }
-    //Aggregate
-    driveTx.ToAggregate(driveAccount.PublicAccount)
+    handleError(err)
 
-    //Create NewBondedAggregateTransaction
-    aggTx, err := client.NewCompleteAggregateTransaction(
-       sdk.NewDeadline(time.Hour),
-       []sdk.Transaction{driveTx},
-    )
+	// Sign transaction
+	signedAggTx, err := owner.SignWithCosignatures(aggTx, []*sdk.Account{driveAccount})
+	if err != nil {
+		fmt.Printf("Sign returned error: %s", err)
+		return
+	}
 
-    // Sign transaction
-    signedAggTx, err := owner.SignWithCosignatures(aggTx, []*sdk.Account{driveAccount})
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+	var wg sync.WaitGroup
+	wg.Add(1)
+	// add handler
+	err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func (info sdk.Transaction) bool {
+		wg.Done()
 
-    var wg sync.WaitGroup
-    wg.Add(1)
-    // add handler
-    err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func (info sdk.Transaction) bool {
-     wg.Done()
+		return true
+	})
 
-     return true
-    })
+	go wsClient.Listen()
 
-    go wsClient.Listen()
+	// Announce transaction
+	_, err = client.Transaction.Announce(ctx, signedAggTx)
+	handleError(err)
 
-    // Announce transaction
-    _, err = client.Transaction.Announce(ctx, signedAggTx)
-    if err != nil {
-       fmt.Printf("Transaction.Announce returned error: %s", err)
-       return
-    }
+	wg.Wait()
 
-    wg.Wait()
+	drive, err := client.Storage.GetDrive(ctx, driveAccount.PublicAccount)
+	handleError(err)
 
-    drive, err := client.Storage.GetDrive(ctx, driveAccount.PublicAccount)
-    if err != nil {
-        fmt.Printf("Storage.GetDrive returned error: %s", err)
-        return
-    }
-
-    println(drive.String())
+	println(drive.String())
 }
 ```
 
@@ -140,11 +121,12 @@ func main() {
 Join To Drive Transaction is used to join to a drive. For creating use **NewJoinToDriveTransaction()**
 
 Following parameters is required:
- - **driveKey** - public account of a drive
+ - **publicAccount** - public account of a drive
 
 >**Note**\
 A replicator must have enough count of storage units to join.
 
+Before starting use the example [to create a drive](#preparedrivetransaction)
 ```go
 package main
 
@@ -161,7 +143,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key. Change it
+    // Private key of some exist account. Change it
     replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
 )
 
@@ -176,29 +158,24 @@ func main() {
     defer cancel()
 
     conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client = sdk.NewClient(nil, conf)
 
     // Create websocket client
     wsClient, err = websocket.NewClient(ctx, conf)
-    if err != nil {
-        panic(err)
-    }
+    handleError(err)
     defer wsClient.Close()
 
     //start listen
     go wsClient.Listen()
 
     //----------
-    //Use example above to create a drive
+    //Create a drive
     //------------
 
-    // Create a replicator. It must have storage units
+    // A replicator. It must have storage units
     replicator, err := client.NewAccountFromPrivateKey(replicatorPrivateKey)
     handleError(err)
 
@@ -258,6 +235,9 @@ Following parameters is required:
  - **AddActions** - new added files
  - **RemoveActions** - deleted files
 
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
 ```go
 package main
 
@@ -274,7 +254,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://54.255.165.100:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
     replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
 )
@@ -290,10 +270,7 @@ func main() {
     defer cancel()
 
     conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client = sdk.NewClient(nil, conf)
@@ -310,20 +287,13 @@ func main() {
 
     // Create an owner
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------
-    //Use examples above for:
     // - prepare a new drive
     // - join some replicator
     //-----------------------
@@ -381,8 +351,13 @@ func main() {
 Files Deposit Transaction is used to update a remote drive. For creating use **NewFilesDepositTransaction()**
 
 Following parameters is required:
- - **driveKey** - public account of a drive
+ - **publicAccount** - public account of a drive
  - **files** - files hashes
+
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
 
 ```go
 package main
@@ -400,7 +375,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://54.255.165.100:3000"
-    // A valid private key. Change it
+    // Private key of some exist account. Change it
     privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
     replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
 )
@@ -453,7 +428,6 @@ func main() {
     handleError(err)
 
     //-----------------------
-    //Use examples above for:
     // - prepare a new drive
     // - join replicators
     // - upload a file
@@ -462,6 +436,7 @@ func main() {
     // some file hash
     fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093")
 
+    //New deposit transaction
     depositTx, err := client.NewFilesDepositTransaction(
         sdk.NewDeadline(time.Hour),
         driveAccount.PublicAccount,
@@ -480,6 +455,7 @@ func main() {
     }
 
     wg.Add(1)
+    //wait to confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(replicator.Address, func(transaction sdk.Transaction) bool {
         if signedDepositTx.Hash.Equal(transaction.GetAbstractTransaction().TransactionHash){
             fmt.Println("Deposited!")
@@ -512,6 +488,9 @@ Following parameters is required:
  - **driveKey** - public account of a drive
 
 #### EndDriveTransaction By Owner
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+
 ```go
 package main
 
@@ -528,7 +507,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://54.255.165.100:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 )
 
@@ -543,10 +522,7 @@ func main() {
     defer cancel()
 
     conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client = sdk.NewClient(nil, conf)
@@ -563,20 +539,14 @@ func main() {
 
     // Create an owner
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------------------------
-    // Use example above to prepare a new drive
+    // prepare a new drive
     //-----------------------------------------
 
     // End drive by owner
@@ -587,10 +557,7 @@ func main() {
 
     // Sign transaction
     signedEndTx, err := owner.Sign(endDriveTx)
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Add(1)
     // add handler
@@ -603,16 +570,17 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(context.Background(), signedEndTx)
-    if err != nil {
-        fmt.Printf("Transaction.Announce returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Wait()
 }
 ```
 
 #### EndDriveTransaction By Replicators
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+
 ```go
 package main
 
@@ -629,7 +597,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://54.255.165.100:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 )
 
@@ -644,19 +612,15 @@ func main() {
     defer cancel()
 
     conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client = sdk.NewClient(nil, conf)
 
     // Create websocket client
     wsClient, err = websocket.NewClient(ctx, conf)
-    if err != nil {
-        panic(err)
-    }
+    handleError(err)
+
     defer wsClient.Close()
 
     //start listen
@@ -664,20 +628,14 @@ func main() {
 
     // Create an owner
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------------------------
-    // Use example above to prepare a new drive,
+    // prepare a new drive
     // join replicators
     //-----------------------------------------
 
@@ -697,10 +655,7 @@ func main() {
 
     // Sign transaction
     signedEndTx, err := replicator.SignWithCosignatures(aggComplTrx, []*sdk.Account{}) //sign with other replicators
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Add(1)
     // add handler
@@ -713,10 +668,7 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(context.Background(), signedEndTx)
-    if err != nil {
-        fmt.Printf("Transaction.Announce returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Wait()
 }
@@ -727,7 +679,13 @@ Drive Files Reward Transaction is used to reward replicators for files downloadi
 
 Following parameters is required:
  - **uploadInfos** - info about uploads
- 
+
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
+ - [to make file deposit](#filesdeposittransaction)
+
 ```go
 package main
 
@@ -742,46 +700,34 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
 func main() {
     conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
     // Create an replicator that add a new exchange offer from
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // A new replicator
     replicator, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------
-    //Use examples above for:
     // - prepare a new drive
     // - join replicators
     // - upload a file
+    // - make file deposit
     //-----------------------
 
     driveFilesRewardTx, err := client.NewDriveFilesRewardTransaction(
@@ -833,6 +779,12 @@ To start verification the drive must be in the ***InProgress*** state. To start 
 Following parameters is required:
  - **driveKey** - public account of a drive
 
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
+ - [to make file deposit](#filesdeposittransaction)
+
 ```go
 package main
 
@@ -847,39 +799,30 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
 func main() {
     conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
     // Create an replicator that add a new exchange offer from
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------
-    //Use examples above for:
     // - prepare a new drive
     // - join replicators
     // - upload a file
+    // - make a file deposit
     //-----------------------
 
     // Create a new start drive verification transaction
@@ -887,13 +830,11 @@ func main() {
         sdk.NewDeadline(time.Hour),
         driveAccount.PublicAccount,
     )
+    handleError(err)
 
     // Sign transaction
     signedVerificationTx, err := owner.Sign(startVerificationTx)
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg := &sync.WaitGroup{}
     wg.Add(1)
@@ -909,10 +850,7 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(ctx, signedVerificationTx)
-    if err != nil {
-        fmt.Printf("Transaction.Announce returned error: %s", err)
-        return
-    }
+    handleError(err)
     
     wg.Wait()
 }
@@ -923,6 +861,12 @@ End Drive Verification Transaction is used to end drive verification. For creati
 
 Following parameters is required:
  - **Failures** - replicator that failed verification and block hash where was it.
+
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
+ - [to make file deposit](#filesdeposittransaction)
 
 ```go
 package main
@@ -938,36 +882,26 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
 func main() {
     conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
     // Create an replicator that add a new exchange offer from
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     //-----------------------
-    //Use examples above for:
     // - prepare a new drive
     // - join replicators
     // - upload a file
@@ -979,13 +913,11 @@ func main() {
         sdk.NewDeadline(time.Hour),
         driveAccount.PublicAccount,
     )
+    handleError(err)
 
     // Sign transaction
     signedEndVerificationTx, err := owner.Sign(endVerificationTx)
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg := &sync.WaitGroup{}
     wg.Add(1)
@@ -1001,21 +933,23 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(ctx, signedEndVerificationTx)
-    if err != nil {
-        fmt.Printf("Transaction.Announce returned error: %s", err)
-        return
-    }
+    handleError(err)
     
     wg.Wait()
 }
 ```
 
-### Start file download transaction
+### StartFileDownloadTransaction
 Returns `StartFileDownloadTransaction`. For creating use **NewStartFileDownloadTransaction()**
 
 Following parameters is required:
  - **PublicAccount** - public account of a drive
  - **[]*DownloadFile** - downloaded files
+
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
 
 ```go
 package main
@@ -1031,38 +965,28 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"
 )
 
 func main() {
     conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
     //Create an account that add a new exchange offer from
     account, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-       fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-       return
-    }
+    handleError(err)
 
     var driveAccount *sdk.Account
     
     // Create a new replicator
     replicator, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
     
     //-----------------------------
-    //Create a new driveAccount
     //Prepare the drive
     //Join replicators to the drive
     //Upload a file
@@ -1096,7 +1020,7 @@ func main() {
 
     wg.Add(1)
     err = wsClient.AddConfirmedAddedHandlers(owner.Address, func(transaction sdk.Transaction) bool {
-       fmt.Println("Deposited!")
+       fmt.Println("Started!")
        wg.Done()
 
        return true
@@ -1105,11 +1029,104 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(ctx, signedDownloadTx)
-    if err != nil {
-       fmt.Printf("Transaction.Announce returned error: %s", err)
-       return
-    }
+    handleError(err)
 }
 ```
 
-### End file download transaction
+### EndFileDownloadTransaction
+Returns `EndFileDownloadTransaction`. For creating use **NewStartFileDownloadTransaction()**
+
+Following parameters is required:
+ - **PublicAccount** - public account of a recipient
+ - **OperationToken** - OperationToken of a download transaction (hash)
+ - **[]*DownloadFile** - downloaded files
+
+Before starting use the examples:
+ - [to create a drive](#preparedrivetransaction)
+ - [to join replicator](#jointodrivetransaction)
+ - [to upload a new file](#drivefilesystemtransaction)
+ - [to start file download](#startfiledownloadtransaction)
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "time"
+
+    "github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+)
+
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Private key of some exist account
+    privateKey = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"
+)
+
+func main() {
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    handleError(err)
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    //Create an account that add a new exchange offer from
+    account, err := client.NewAccountFromPrivateKey(privateKey)
+    handleError(err)
+
+    var driveAccount *sdk.Account
+    
+    // Create a new replicator
+    replicator, err := client.NewAccount()
+    handleError(err)
+    
+    //-----------------------------
+    //Prepare the drive
+    //Join replicators to the drive
+    //Upload a file
+    //Start file download
+    //-----------------------------
+
+    fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093") // some file hash
+    fileSize := 50 // some file size
+
+    endFileDownloadTx, err := client.NewEndFileDownloadTransaction(
+		sdk.NewDeadline(time.Hour),
+		holder.PublicAccount,
+		uniqueHash,
+		[]*sdk.DownloadFile{
+			{
+				FileHash: fileHash,
+				FileSize: sdk.StorageSize(fileSize),
+			},
+		},
+	)
+	handleError(err)
+	endFileDownloadTx.ToAggregate(driveAccount.PublicAccount)
+
+	aggEndDownloadTx, err := client.NewCompleteAggregateTransaction(
+		sdk.NewDeadline(time.Hour),
+		[]sdk.Transaction{endFileDownloadTx},
+	)
+	handleError(err)
+
+	replicatorWithoutFirst := replicatorAccounts[1:]
+	signedAggEndDownloadTx, err := replicatorAccounts[0].SignWithCosignatures(aggEndDownloadTx, replicatorWithoutFirst)
+    handleError(err)
+
+    wg.Add(1)
+    err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func(transaction sdk.Transaction) bool {
+       fmt.Println("Ended!")
+       wg.Done()
+
+       return true
+    })
+    handleError(err)
+
+    // Announce transaction
+    _, err = client.Transaction.Announce(ctx, signedEndDownloadTx)
+    handleError(err)
+}
+```

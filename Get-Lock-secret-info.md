@@ -16,7 +16,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key. Change it
+	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
@@ -30,7 +30,7 @@ func main() {
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
     
-    //some account
+    //Get some account
     account, err := client.NewAccountFromPrivateKey(privateKey)
 	if err != nil {
 		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
@@ -63,7 +63,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key. Change it
+	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
@@ -77,7 +77,7 @@ func main() {
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
     
-    //some proof
+    //create some proof
 	proofB := make([]byte, 8)
 	_, err = rand.Read(proofB)
 	if err != nil {
@@ -113,7 +113,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://localhost:3000"
-	// A valid private key. Change it
+	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
@@ -127,7 +127,7 @@ func main() {
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
     
-    //some hex compositeHash
+    //Some hex compositeHash
 	bytes, err := hex.DecodeString("11a4cc303e91ae150c6c487ec048a2a07298042427094f2ea6701c25aa565b6c")
 	compositeHash := &sdk.Hash{}
 	copy(compositeHash[:], bytes)

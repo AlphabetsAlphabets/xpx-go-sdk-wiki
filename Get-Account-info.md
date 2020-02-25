@@ -302,7 +302,7 @@ const (
     baseUrl = "http://localhost:3000"
     // Types of network.
     networkType = sdk.MijinTest
-    // A valid private key.
+    // Private key of some exist account.
     publicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
 )
 

@@ -24,7 +24,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://54.255.165.100:3000"
-	// A valid private key. Change it
+	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
@@ -132,7 +132,7 @@ import (
 const (
 	// Catapult-api-rest server.
 	baseUrl = "http://54.255.165.100:3000"
-	// A valid private key. Change it
+	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 

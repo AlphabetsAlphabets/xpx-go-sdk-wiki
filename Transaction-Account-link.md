@@ -21,7 +21,7 @@ import (
 const (
     // Catapult-api-rest server.
     baseUrl = "http://localhost:3000"
-    // A valid private key
+    // Private key of some exist account
     privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
     // A valid public key
     publicKey = "6EED33183360FC92CD8EBD61EB8859FB984EC164B94CF496398C91BC5B0769B3"
