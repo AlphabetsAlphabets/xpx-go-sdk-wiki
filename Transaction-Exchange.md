@@ -50,7 +50,7 @@ func main() {
 		wsClient.Listen()
 	}()
 
-	// Create an account that add a new exchange offer from
+	// Some account that sell or buy masaics
 	account, err := client.NewAccountFromPrivateKey(privateKey)
 	if err != nil {
 		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
@@ -90,6 +90,7 @@ func main() {
 		return
 	}
 
+	//Signt transaction
 	signedTransaction, err := account.Sign(transaction)
 	if err != nil {
 		fmt.Printf("Sign returned error: %s", err)
@@ -105,6 +106,7 @@ func main() {
 
 	wg.Wait()
 
+	//Get account offers
 	exchangeInfo, err := client.Exchange.GetAccountExchangeInfo(ctx, account.PublicAccount)
 	if err != nil {
 		fmt.Printf("Exchange.GetAccountExchangeInfo returned error: %s", err)
@@ -177,7 +179,7 @@ func main() {
 	// Create a new offer
 	//-------------------
 	
-	// Create an account for make exchange with the new offer
+	// Some account that agree with offer
 	accountBuyer, err := client.NewAccount()
 	if err != nil {
 		fmt.Printf("NewAccount returned error: %s", err)
@@ -187,8 +189,9 @@ func main() {
 	//create chan for message
 	ch := make(chan string)
 
-	offerType := sdk.SellOffer
-
+	offerType := sdk.SellOffer //offer type
+	
+	//get all offers by mosaic namespace id
 	offerInfo, err := client.Exchange.GetExchangeOfferByAssetId(ctx, sdk.StorageNamespaceId, offerType)
 	if err != nil {
 		fmt.Printf("Exchange.GetExchangeOfferByAssetId returned error: %s", err)
@@ -330,7 +333,7 @@ func main() {
 	//start listen websocket
 	go wsClient.Listen()
 
-	// Create an account that add a new exchange offer from
+	// Some account that sell or buy masaics
 	account, err := client.NewAccountFromPrivateKey(privateKey)
 	if err != nil {
 		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
@@ -340,7 +343,7 @@ func main() {
 	//create chan for message
 	ch := make(chan string)
 	
-	offerType := sdk.SellOffer
+	offerType := sdk.SellOffer //or sdk.BuyOffer
 	
 	// add handler to wait while exchange will be created
 	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
@@ -357,8 +360,8 @@ func main() {
 		// An array of offers to removing
 		[]*sdk.RemoveOffer{
 			{
-				offerType,
-				sdk.StorageNamespaceId,
+				offerType, 				//offer type
+				sdk.StorageNamespaceId, //mosaic
 			},
 		},
 	)
