@@ -55,7 +55,7 @@ func main() {
 	handleError(err)
 
 	defer wsClient.Close()
-	// Create an owner
+	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
 	handleError(err)
 
@@ -191,6 +191,7 @@ func main() {
     handleError(err)
 
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(replicator.Address, func(transaction sdk.Transaction) bool {
         fmt.Printf("Replicato confirm INFO: %v\n", transaction.String())
         wg.Done()
@@ -277,15 +278,14 @@ func main() {
 
     // Create websocket client
     wsClient, err = websocket.NewClient(ctx, conf)
-    if err != nil {
-        panic(err)
-    }
+    handleError(err)
+
     defer wsClient.Close()
 
     //start listen
     go wsClient.Listen()
 
-    // Create an owner
+    // Some an account that will owner of a new drive
     owner, err := client.NewAccountFromPrivateKey(privateKey)
     handleError(err)
 
@@ -322,6 +322,7 @@ func main() {
        },
        []*sdk.Action{},
     )
+    handleError(err)
 
     // Sign transaction
     signedFsTx, err := owner.Sign(fsTx)
@@ -391,37 +392,26 @@ func main() {
     defer cancel()
 
     conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Use the default http client
     client = sdk.NewClient(nil, conf)
 
     // Create websocket client
     wsClient, err = websocket.NewClient(ctx, conf)
-    if err != nil {
-        panic(err)
-    }
+    handleError(err)
     defer wsClient.Close()
 
     //start listen
     go wsClient.Listen()
 
-    // Create an owner
+    // Some an account that will owner of a new drive
     owner, err := client.NewAccountFromPrivateKey(privateKey)
-    if err != nil {
-        fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a new drive account
     driveAccount, err := client.NewAccount()
-    if err != nil {
-        fmt.Printf("NewAccount returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     // Create a replicator. It must have storage units
     replicator, err := client.NewAccountFromPrivateKey(replicatorPrivateKey)
@@ -446,13 +436,11 @@ func main() {
             },
         },
     )
+    handleError(err)
 
     // Sign transaction
     signedDepositTx, err := replicator.Sign(depositTx)
-    if err != nil {
-        fmt.Printf("Sign returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Add(1)
     //wait to confirmed transaction
@@ -468,10 +456,7 @@ func main() {
 
     // Announce transaction
     _, err = client.Transaction.Announce(context.Background(), signedDepositTx)
-    if err != nil {
-        fmt.Printf("Transaction.Announce returned error: %s", err)
-        return
-    }
+    handleError(err)
 
     wg.Wait()
     
@@ -537,7 +522,7 @@ func main() {
     //start listen
     go wsClient.Listen()
 
-    // Create an owner
+    // Some an account that will owner of a new drive
     owner, err := client.NewAccountFromPrivateKey(privateKey)
     handleError(err)
 
@@ -626,7 +611,7 @@ func main() {
     //start listen
     go wsClient.Listen()
 
-    // Create an owner
+    // Some an account that will owner of a new drive
     owner, err := client.NewAccountFromPrivateKey(privateKey)
     handleError(err)
 
@@ -730,6 +715,7 @@ func main() {
     // - make file deposit
     //-----------------------
 
+    // Create new DriveFilesRewardTransaction
     driveFilesRewardTx, err := client.NewDriveFilesRewardTransaction(
         sdk.NewDeadline(time.Hour),
         []*sdk.UploadInfo{
@@ -754,6 +740,7 @@ func main() {
     handleError(err)
 
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func(transaction sdk.Transaction) bool {
       fmt.Println("Rewarded!")
       wg.Done()
@@ -838,6 +825,7 @@ func main() {
 
     wg := &sync.WaitGroup{}
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(owner.Address, func(transaction sdk.Transaction) bool {
         if signedVerificationTx.Hash.Equal(transaction.GetAbstractTransaction().TransactionHash){
             fmt.Println("Verification started!")
@@ -921,6 +909,7 @@ func main() {
 
     wg := &sync.WaitGroup{}
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(owner.Address, func(transaction sdk.Transaction) bool {
         if signedEndVerificationTx.Hash.Equal(transaction.GetAbstractTransaction().TransactionHash){
             fmt.Println("Verification finished!")
@@ -982,7 +971,7 @@ func main() {
 
     var driveAccount *sdk.Account
     
-    // Create a new replicator
+    // Some new replicator
     replicator, err := client.NewAccount()
     handleError(err)
     
@@ -992,8 +981,10 @@ func main() {
     //Upload a file
     //-----------------------------
 
-    fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093") // some file hash
-    fileSize := 50 // some file size
+    // some file hash
+    fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093") 
+    // some file size
+    fileSize := 50
 
     //Create a new download transaction
     startFileDownloadTx, err := client.NewStartFileDownloadTransaction(
@@ -1015,10 +1006,12 @@ func main() {
     )
     handleError(err)
 
-    signedDownloadTx, err := owner.SignWithCosignatures(downloadTx, []*sdk.Account{})
+    //Sign downloadTx
+    signedDownloadTx, err := owner.Sign(downloadTx)
     handleError(err)
 
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(owner.Address, func(transaction sdk.Transaction) bool {
        fmt.Println("Started!")
        wg.Done()
@@ -1072,13 +1065,13 @@ func main() {
     // Use the default http client
     client := sdk.NewClient(nil, conf)
 
-    //Create an account that add a new exchange offer from
-    account, err := client.NewAccountFromPrivateKey(privateKey)
-    handleError(err)
+    // Some an account that will owner of a new drive
+	owner, err := client.NewAccountFromPrivateKey(privateKey)
+	handleError(err)
 
     var driveAccount *sdk.Account
     
-    // Create a new replicator
+    // Some new replicator
     replicator, err := client.NewAccount()
     handleError(err)
     
@@ -1089,9 +1082,12 @@ func main() {
     //Start file download
     //-----------------------------
 
-    fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093") // some file hash
-    fileSize := 50 // some file size
+    // some file hash
+    fileHash, _ := sdk.StringToHash("AA2d2427E105A9B60DF634553849135DF629F1408A018D02B07A70CAFFB43093") 
+    // some file size
+    fileSize := 50
 
+    //Create a new EndFileDownloadTransaction
     endFileDownloadTx, err := client.NewEndFileDownloadTransaction(
 		sdk.NewDeadline(time.Hour),
 		holder.PublicAccount,
@@ -1112,11 +1108,13 @@ func main() {
 	)
 	handleError(err)
 
-	replicatorWithoutFirst := replicatorAccounts[1:]
+    replicatorWithoutFirst := replicatorAccounts[1:]
+    // Send aggEndDownloadTx by first replicator and cosign by others
 	signedAggEndDownloadTx, err := replicatorAccounts[0].SignWithCosignatures(aggEndDownloadTx, replicatorWithoutFirst)
     handleError(err)
 
     wg.Add(1)
+    // Wait confirmed transaction
     err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func(transaction sdk.Transaction) bool {
        fmt.Println("Ended!")
        wg.Done()
