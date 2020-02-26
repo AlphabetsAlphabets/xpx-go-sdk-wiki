@@ -29,16 +29,16 @@ func main() {
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
-    
-    //Get some account
-    account, err := client.NewAccountFromPrivateKey(privateKey)
+
+	//Get some account
+	account, err := client.NewAccountFromPrivateKey(privateKey)
 	if err != nil {
 		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
 		return
 	}
 
-    //get secretLockInfos by account
-    infosByAccount, err := client.Lock.GetSecretLockInfosByAccount(context.Background(), account.PublicAccount)
+	//get secretLockInfos by account
+	infosByAccount, err := client.Lock.GetSecretLockInfosByAccount(context.Background(), account.PublicAccount)
 	for _, v := range infosByAccount {
 		fmt.Println(v.CompositeHash)
 	}
@@ -76,8 +76,8 @@ func main() {
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
-    
-    //create some proof
+
+	//create some proof
 	proofB := make([]byte, 8)
 	_, err = rand.Read(proofB)
 	if err != nil {
@@ -126,12 +126,12 @@ func main() {
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
-    
-    //Some hex compositeHash
+
+	//Some hex compositeHash
 	bytes, err := hex.DecodeString("11a4cc303e91ae150c6c487ec048a2a07298042427094f2ea6701c25aa565b6c")
 	compositeHash := &sdk.Hash{}
 	copy(compositeHash[:], bytes)
-	
+
 	infosByCompositeHash, err := client.Lock.GetSecretLockInfo(context.Background(), compositeHash)
 	fmt.Println(infosByCompositeHash)
 }

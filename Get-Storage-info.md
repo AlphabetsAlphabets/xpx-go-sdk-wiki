@@ -32,7 +32,7 @@ func main()  {
 	// Some drive account (create or get)
 	driveAccount := &sdk.Account{}
 
-    //Get drive
+	//Get drive
 	drive, err := client.Storage.GetDrive(context.Background(), driveAccount.PublicAccount)
 	handleError(err)
 
@@ -79,7 +79,7 @@ func main()  {
 	// Some drive account (create or get
 	owner := &sdk.Account{}
 
-    //Get owner drives
+	//Get owner drives
 	drives, err := client.Storage.GetAccountDrives(context.Background(), owner.PublicAccount, sdk.AllRoles)
 	handleError(err)
 
@@ -114,7 +114,7 @@ func main()  {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-    //Create new config
+	//Create new config
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
 	if err != nil {
 		fmt.Printf("NewConfig returned error: %s", err)
@@ -128,11 +128,11 @@ func main()  {
 	recipient, err := client.NewAccount()
 	handleError(err)
 
-    //Get download infos
+	//Get download infos
 	downloadInfos, err := client.Storage.GetAccountDownloadInfos(ctx, recipient.PublicAccount)
 	handleError(err)
 
-    //Print download infos
+	//Print download infos
 	for _, d := range downloadInfos {
 		fmt.Println(d)
 	}
@@ -176,11 +176,11 @@ func main()  {
 
 	//Some hash of a transaction
 	operationToken := &sdk.Hash{}
-    
-    //Get download info
+
+	//Get download info
 	downloadInfo, err := client.Storage.GetDownloadInfo(ctx, operationToken)
 	handleError(err)
-	
+
 	fmt.Println(downloadInfo)
 }
 ```
@@ -272,7 +272,7 @@ func main()  {
 	// Some drive account (create or get)
 	driveAccount := &sdk.Account{}
 
-    //Get status
+	//Get status
 	status, err := client.Storage.GetVerificationStatus(ctx, driveAccount.PublicAccount)
 	handleError(err)
 

@@ -29,7 +29,7 @@ var timeout = time.Minute*5
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	
+
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
 	if err != nil {
 		fmt.Printf("NewConfig returned error: %s", err)
@@ -178,7 +178,7 @@ func main() {
 	//-------------------
 	// Create a new offer
 	//-------------------
-	
+
 	// Some account that agree with offer
 	accountBuyer, err := client.NewAccount()
 	if err != nil {
@@ -190,7 +190,7 @@ func main() {
 	ch := make(chan string)
 
 	offerType := sdk.SellOffer //offer type
-	
+
 	//get all offers by mosaic namespace id
 	offerInfo, err := client.Exchange.GetExchangeOfferByAssetId(ctx, sdk.StorageNamespaceId, offerType)
 	if err != nil {
@@ -342,9 +342,9 @@ func main() {
 
 	//create chan for message
 	ch := make(chan string)
-	
+
 	offerType := sdk.SellOffer //or sdk.BuyOffer
-	
+
 	// add handler to wait while exchange will be created
 	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
 		ch <- "Removed!"
