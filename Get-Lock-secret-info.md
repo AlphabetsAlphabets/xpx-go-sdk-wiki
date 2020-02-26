@@ -85,8 +85,11 @@ func main() {
 		return
 	}
 
+	//New proof
 	proof := sdk.NewProofFromBytes(proofB)
+	//New secret from proof
 	secret, _ := proof.Secret(sdk.SHA3_256)
+	//Get info by secret
 	infosBySecret, err := client.Lock.GetSecretLockInfosBySecret(context.Background(), &secret.Hash)
 	for _, v := range infosBySecret {
 		fmt.Println(v)
@@ -132,6 +135,7 @@ func main() {
 	compositeHash := &sdk.Hash{}
 	copy(compositeHash[:], bytes)
 
+	//Get secret lock info
 	infosByCompositeHash, err := client.Lock.GetSecretLockInfo(context.Background(), compositeHash)
 	fmt.Println(infosByCompositeHash)
 }

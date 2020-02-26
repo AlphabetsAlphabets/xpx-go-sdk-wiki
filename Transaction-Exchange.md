@@ -354,6 +354,7 @@ func main() {
 		panic(err)
 	}
 
+	//Create a new RemoveExchangeOfferTransaction
 	transactionRemove, err := client.NewRemoveExchangeOfferTransaction(
 		// The maximum amount of time to include the transaction in the blockchain.
 		sdk.NewDeadline(time.Hour),

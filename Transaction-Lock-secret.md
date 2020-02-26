@@ -178,7 +178,9 @@ func main() {
 		return
 	}
 
+	//New proof
 	proof := sdk.NewProofFromBytes(proofB)
+	//New secret from proof
 	secret, _ := proof.Secret(sdk.SHA3_256)
 
 	// A new secret lock
