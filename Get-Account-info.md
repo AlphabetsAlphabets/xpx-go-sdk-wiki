@@ -239,8 +239,7 @@ async fn main() {
 ```
 
 ### Get multisig account information.
-Returns the multisig account information.
-
+- Returns the multisig account information.
 - Following parameters required:
   - **account_id** - public keys or addresses of mulstisig account to get information about
 
@@ -269,7 +268,7 @@ async fn main() {
 ```
 
 ### Get multisig account graph information.
-Returns the multisig account graph.
+- Returns the multisig account graph.
 - Following parameters required:
   - **account_id** - public keys or addresses of mulstisig account to get information about
 
