@@ -267,3 +267,34 @@ async fn main() {
 }
 ```
 
+### Get multisig account graph information.
+
+- Following parameters required:
+  - **account_id** - public keys or addresses of mulstisig account to get information about
+
+```rust
+use xpx_chain_sdk::api::SiriusClient;
+
+#[tokio::main]
+async fn main() {
+    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+
+    let sirius_client = SiriusClient::new(node_url).await;
+    let client = match sirius_client {
+        Ok(resp) => resp,
+        Err(err) => panic!("{}", err),
+    };
+
+    let account_id: &str = "VB4JKBIUALJYLYNRB2QJM3TPDGZDOGHSVKDIBR4R";
+    //let account_id: &str = "4543E75720C9ED6D9AC5FB360AEBD24223F5E08D442416B70BEC0B4A4446D5A4";
+
+    let multisig = client.account_api().account_multisig_graph(account_id).await;
+    match multisig {
+        Ok(resp) => println!("{}", resp),
+        Err(err) => eprintln!("{}", err),
+    }
+}
+```
+
+
+
