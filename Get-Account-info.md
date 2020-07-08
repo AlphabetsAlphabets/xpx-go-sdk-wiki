@@ -4,29 +4,51 @@
 Returns AccountInfo for an account.
 
 - Following parameters required:
-  - **account_id** - The public key or address of the account.
+  - **Address** - address to get info from.
 
-```rust
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public key.
+    publicKey  = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    //let account_id: &str = "VC6LFNKEQQEI5DOAA2OJLL4XRPDNPLRJDH6T2B7X";
-    let account_id: &str = "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0";
+// Simple Account API request
+func main() {
 
-    let account_info = client.account_api().account_info(account_id).await;
-    match account_info {
-        Ok(resp) => println!("{}", resp),
-        Err(err) => eprintln!("{}", err),
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    address, err := sdk.NewAddressFromPublicKey(publicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAddressFromPublicKey returned error: %s", err)
+        return
+    }
+
+    // Get AccountInfo for an account.
+    account, err := client.Account.GetAccountInfo(context.Background(), address)
+    if err != nil {
+        fmt.Printf("Account.GetAccountInfo returned error: %s", err)
+        return
+    }
+    fmt.Printf(account.String())
 }
 ```
 
@@ -35,35 +57,59 @@ async fn main() {
 Returns AccountInfo for multiple accounts.
 
 - Following parameters required:
-  - **account_ids** - public keys or addresses to get info from
+  - **[]sdk.Address** - addresses to get info from
 
-```rust
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public keys
+    publicKeyOne = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+    publicKeyTwo = "280F42F3898B79EB1E304D14F873186AC7D2401A787092D7BD1D2D34C6B182F9"
+)
 
-    //let account_ids: Vec<&str> = vec![
-    //    "VC6LFNKEQQEI5DOAA2OJLL4XRPDNPLRJDH6T2B7X",
-    //    "VA46EIYLK4OEUSU5SOUOJLYICJBPRD4QOEP4ET4V",
-    //];
+// Simple Account API request
+func main() {
 
-    let account_ids: Vec<&str> = vec![
-        "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0",
-        "94E15FAC453553A716D86DADE6EA0EB052B42D62326FB684EA54031540DD674F",
-    ];
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-    let accounts_info = client.account_api().accounts_info(account_ids).await;
-    match accounts_info {
-        Ok(resp) => println!("{:?}", resp),
-        Err(err) => eprintln!("{}", err),
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    addressOne, err := sdk.NewAddressFromPublicKey(publicKeyOne, networkType)
+    if err != nil {
+        fmt.Printf("NewAddressFromPublicKey returned error: %s", err)
+        return
+    }
+
+    addressTwo, err := sdk.NewAddressFromPublicKey(publicKeyTwo, networkType)
+    if err != nil {
+        fmt.Printf("NewAddressFromPublicKey returned error: %s", err)
+        return
+    }
+
+    // Get AccountsInfo for several accounts.
+    accountsInfo, err := client.Account.GetAccountsInfo(context.Background(), addressOne, addressTwo)
+    if err != nil {
+        fmt.Printf("Account.GetAccountsInfo returned error: %s", err)
+        return
+    }
+    for _, accountInfo := range accountsInfo {
+        fmt.Printf("%s\n", accountInfo.String())
     }
 }
 ```
@@ -72,39 +118,52 @@ async fn main() {
 
 Gets an array of confirmed transaction for which an account is signer or recipient.
 - Following parameters required:
-  - **public_account** - public account to get transactions associated
+  - **Public Account** - account to get transactions associated with
 
-```rust
-use xpx_chain_sdk::account::PublicAccount;
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public key
+    publicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    // let network_type = xpx_chain_sdk::network::PUBLIC_TEST;
-    let network_type = client.network_type();
+func main() {
 
-    let public_key: &str = "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0";
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-    let public_account = PublicAccount::from_public_key(public_key, network_type).unwrap();
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-    let accounts_transactions = client
-        .account_api()
-        .transactions(&public_account, None, None, Some("id"))
-        .await;
+    account, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
 
-    match accounts_transactions {
-        Ok(accounts) => accounts
-            .iter()
-            .for_each(|account_txs| println!("{}", account_txs)),
-        Err(err) => eprintln!("{}", err),
+    // Get confirmed transactions information.
+    transactions, err := client.Account.Transactions(context.Background(), account, nil)
+    if err != nil {
+        fmt.Printf("Account.Transactions returned error: %s", err)
+        return
+    }
+
+    for _, transaction := range transactions {
+        fmt.Printf("%s\n", transaction.String())
     }
 }
 ```
@@ -115,39 +174,52 @@ async fn main() {
 A transaction is said to be incoming regarding an account if the account is the recipient of a transaction.
 
 - Following parameters required:
-  - **public_account** - account to get incoming transactions associated
+  - **Public Account** - account to get incoming transactions associated with
 
-```rust
-use xpx_chain_sdk::account::PublicAccount;
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public key
+    publicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    // let network_type = xpx_chain_sdk::network::PUBLIC_TEST;
-    let network_type = client.network_type();
+func main() {
 
-    let public_key: &str = "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0";
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-    let public_account = PublicAccount::from_public_key(public_key, network_type).unwrap();
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-    let accounts_transactions = client
-        .account_api()
-        .transactions(&public_account, None, None, Some("id"))
-        .await;
+    account, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
 
-    match accounts_transactions {
-        Ok(accounts) => accounts
-            .iter()
-            .for_each(|account_txs| println!("{}", account_txs)),
-        Err(err) => eprintln!("{}", err),
+    // Get confirmed transactions information.
+    transactions, err := client.Account.IncomingTransactions(context.Background(), account, nil)
+    if err != nil {
+        fmt.Printf("Account.IncomingTransactions returned error: %s", err)
+        return
+    }
+
+    for _, transaction := range transactions {
+        fmt.Printf("%s\n", transaction.String())
     }
 }
 ```
@@ -158,39 +230,52 @@ async fn main() {
 A transaction is said to be outgoing egarding an account if the account is the sender of a transaction.
 
 - Following parameters required:
-  - **public_account** - account to get outgoing transactions associated
+  - **Public Account** - account to get outgoing transactions associated with
 
-```rust
-use xpx_chain_sdk::account::PublicAccount;
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public key.
+    publicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    // let network_type = xpx_chain_sdk::network::PUBLIC_TEST;
-    let network_type = client.network_type();
+func main() {
 
-    let public_key: &str = "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0";
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-    let public_account = PublicAccount::from_public_key(public_key, network_type).unwrap();
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-    let accounts_transactions = client
-        .account_api()
-        .outgoing_transactions(&public_account, None, None, Some("id"))
-        .await;
+    account, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
 
-    match accounts_transactions {
-        Ok(accounts) => accounts
-            .iter()
-            .for_each(|account_txs| println!("{}", account_txs)),
-        Err(err) => eprintln!("{}", err),
+    // Get confirmed transactions information.
+    transactions, err := client.Account.OutgoingTransactions(context.Background(), account, nil)
+    if err != nil {
+        fmt.Printf("Account.OutgoingTransactions returned error: %s", err)
+        return
+    }
+
+    for _, transaction := range transactions {
+        fmt.Printf("%s\n", transaction .String())
     }
 }
 ```
@@ -201,39 +286,53 @@ async fn main() {
 receiver and which have not yet been included in a block.
 
 - Following parameters required:
-  - **public_account** - account to get unconfirmed transactions associated
+  - **Public Account** - account to get unconfirmed transactions associated with
 
-```rust
-use xpx_chain_sdk::account::PublicAccount;
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // Private key of some exist account.
+    publicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    // let network_type = xpx_chain_sdk::network::PUBLIC_TEST;
-    let network_type = client.network_type();
+func main() {
 
-    let public_key: &str = "5649D09FB884424AB5E3ED16B965CF69E3048A5E641287C319AC3DE995C97FB0";
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
+    }
 
-    let public_account = PublicAccount::from_public_key(public_key, network_type).unwrap();
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
 
-    let accounts_transactions = client
-        .account_api()
-        .unconfirmed_transactions(&public_account, None, None, Some("id"))
-        .await;
+    account, err := sdk.NewAccountFromPublicKey(publicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
 
-    match accounts_transactions {
-        Ok(accounts) => accounts
-            .iter()
-            .for_each(|account_txs| println!("{}", account_txs)),
-        Err(err) => eprintln!("{}", err),
+    // Get confirmed transactions information.
+    // Param account - A PublicAccount struct
+    transactions, err := client.Account.UnconfirmedTransactions(context.Background(), account, nil)
+    if err != nil {
+        fmt.Printf("Account.UnconfirmedTransactions returned error: %s", err)
+        return
+    }
+
+    for _, transaction := range transactions {
+        fmt.Printf("%s\n", transaction.String())
     }
 }
 ```
@@ -241,60 +340,49 @@ async fn main() {
 ### Get multisig account information.
 - Returns the multisig account information.
 - Following parameters required:
-  - **account_id** - public key or address of mulstisig account to get information about
+  - **Address** - address of mulstisig account to get information about
 
-```rust
-use xpx_chain_sdk::api::SiriusClient;
+```go
+package main
 
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
+import (
+    "fmt"
+    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+    "context"
+)
 
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
+const (
+    // Catapult-api-rest server.
+    baseUrl = "http://localhost:3000"
+    // Types of network.
+    networkType = sdk.MijinTest
+    // A valid public key.
+    multisigPublicKey = "E17324EAF403B5FD747055ED3ED97CFD1000AF176FB9294C9424A2814D765A76"
+)
 
-    let account_id: &str = "VB4JKBIUALJYLYNRB2QJM3TPDGZDOGHSVKDIBR4R";
-    //let account_id: &str = "4543E75720C9ED6D9AC5FB360AEBD24223F5E08D442416B70BEC0B4A4446D5A4";
+func main() {
 
-    let multisig = client.account_api().account_multisig(account_id).await;
-    match multisig {
-        Ok(resp) => println!("{}", resp),
-        Err(err) => eprintln!("{}", err),
+    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+    if err != nil {
+        fmt.Printf("NewConfig returned error: %s", err)
+        return
     }
+
+    // Use the default http client
+    client := sdk.NewClient(nil, conf)
+
+    multisig, err := sdk.NewAccountFromPublicKey(multisigPublicKey, networkType)
+    if err != nil {
+        fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
+        return
+    }
+
+    // Get confirmed transactions information.
+    multisigAccountInfo, err := client.Account.GetMultisigAccountInfo(context.Background(), multisig.Address)
+    if err != nil {
+        fmt.Printf("Account.GetMultisigAccountInfo returned error: %s", err)
+        return
+    }
+    fmt.Printf("%s\n", multisigAccountInfo.String() )
 }
 ```
-
-### Get multisig account graph information.
-- Returns the multisig account graph.
-- Following parameters required:
-  - **account_id** - public key or address of mulstisig account to get information about
-
-```rust
-use xpx_chain_sdk::api::SiriusClient;
-
-#[tokio::main]
-async fn main() {
-    let node_url = vec!["http://bctestnet1.brimstone.xpxsirius.io:3000"];
-
-    let sirius_client = SiriusClient::new(node_url).await;
-    let client = match sirius_client {
-        Ok(resp) => resp,
-        Err(err) => panic!("{}", err),
-    };
-
-    let account_id: &str = "VB4JKBIUALJYLYNRB2QJM3TPDGZDOGHSVKDIBR4R";
-    //let account_id: &str = "4543E75720C9ED6D9AC5FB360AEBD24223F5E08D442416B70BEC0B4A4446D5A4";
-
-    let multisig = client.account_api().account_multisig_graph(account_id).await;
-    match multisig {
-        Ok(resp) => println!("{}", resp),
-        Err(err) => eprintln!("{}", err),
-    }
-}
-```
-
-
-
