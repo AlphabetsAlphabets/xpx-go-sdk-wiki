@@ -5,37 +5,37 @@
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // Get BlockInfo by height
-    height, err := client.Blockchain.GetBlockchainHeight(context.Background())
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlockhainHeight returned error: %s", err)
-        return
-    }
-    fmt.Printf("%s\n", height)
+	// Get BlockInfo by height
+	height, err := client.Blockchain.GetBlockchainHeight(context.Background())
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlockhainHeight returned error: %s", err)
+		return
+	}
+	
+	fmt.Println(height)
 }
 ```
 
@@ -48,40 +48,38 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+	
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// height of block in blockchain
+	height := sdk.Height(1)
 
-    // height of block in blockchain
-    height := sdk.Height(1)
-
-    // Get BlockInfo by height
-    block, err := client.Blockchain.GetBlockByHeight(context.Background(), height)
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlockByHeight returned error: %s", err)
-        return
-    }
-    fmt.Printf(block.String())
+	// Get BlockInfo by height
+	block, err := client.Blockchain.GetBlockByHeight(context.Background(), height)
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlockByHeight returned error: %s", err)
+		return
+	}
+	fmt.Printf(block.String())
 }
 ```
 
@@ -95,44 +93,44 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+	
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // height of block in blockchain
-    height := sdk.Height(1)
-    // how many BlockInfo's to return
-    limit :=  sdk.Amount(100)
+	// height of block in blockchain
+	height := sdk.Height(1)
+	// how many BlockInfo's to return
+	limit := sdk.Amount(100)
 
-    // Get BlockInfo's by height with limit
-    blocks, err := client.Blockchain.GetBlocksByHeightWithLimit(context.Background(), height, limit)
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlocksByHeightWithLimit returned error: %s", err)
-        return
-    }
-    for _, block := range blocks {
-        fmt.Printf("%s\n", block.String())
-    }
+	// Get BlockInfo's by height with limit
+	blocks, err := client.Blockchain.GetBlocksByHeightWithLimit(context.Background(), height, limit)
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlocksByHeightWithLimit returned error: %s", err)
+		return
+	}
+
+	for _, block := range blocks {
+		fmt.Printf("%s\n", block.String())
+	}
 }
 ```
 
@@ -145,42 +143,41 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+	
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// height of block in blockchain
+	height := sdk.Height(1)
 
-    // height of block in blockchain
-    height := sdk.Height(1)
-
-    // Get TransactionInfo's by block height
-    transactions, err := client.Blockchain.GetBlockTransactions(context.Background(), height)
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlockTransactions returned error: %s", err)
-        return
-    }
-    for _, transaction := range transactions {
-        fmt.Printf("%s\n", transaction.String())
-    }
+	// Get TransactionInfo's by block height
+	transactions, err := client.Blockchain.GetBlockTransactions(context.Background(), height)
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlockTransactions returned error: %s", err)
+		return
+	}
+	
+	for _, transaction := range transactions {
+		fmt.Printf("%s\n", transaction.String())
+	}
 }
 ```
 
@@ -190,37 +187,36 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // Get score of blockchain
-    score, err := client.Blockchain.GetBlockchainScore(context.Background())
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlockchainScore returned error: %s", err)
-        return
-    }
-    fmt.Printf("%s\n", score)
+	// Get score of blockchain
+	score, err := client.Blockchain.GetBlockchainScore(context.Background())
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlockchainScore returned error: %s", err)
+		return
+	}
+	fmt.Printf("%s\n", score)
 }
 ```
 
@@ -230,37 +226,36 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
-    "context"
+	"context"
+	"fmt"
+	
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-    // Catapult-api-rest server.
-    baseUrl = "http://localhost:3000"
-    // Types of network.
-    networkType = sdk.MijinTest
+	// Sirius api rest server
+	baseUrl = "http://localhost:3000"
 )
 
 // Simple Account API request
 func main() {
 
-    conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-    if err != nil {
-        fmt.Printf("NewConfig returned error: %s", err)
-        return
-    }
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	if err != nil {
+		fmt.Printf("NewConfig returned error: %s", err)
+		return
+	}
 
-    // Use the default http client
-    client := sdk.NewClient(nil, conf)
+	// Use the default http client
+	client := sdk.NewClient(nil, conf)
 
-    // Get storage of blockchain
-    storage, err := client.Blockchain.GetBlockchainStorage(context.Background())
-    if err != nil {
-        fmt.Printf("Blockchain.GetBlockchainStorage returned error: %s", err)
-        return
-    }
-    fmt.Printf("%s\n", storage)
+	// Get storage of blockchain
+	storage, err := client.Blockchain.GetBlockchainStorage(context.Background())
+	if err != nil {
+		fmt.Printf("Blockchain.GetBlockchainStorage returned error: %s", err)
+		return
+	}
+	fmt.Printf("%s\n", storage)
 }
 ```
 

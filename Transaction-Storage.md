@@ -1,5 +1,5 @@
 >**Note**\
-Transaction below requires different mosaics, so during the execution going on exchange. Consequently, before starting should be created new exchange offers.
+Transaction below requires different mosaics, so it includes some exchanges. Consequently, there are should exist exchange offers.
 
 ### PrepareDriveTransaction
 Prepare Drive Transaction is used to create a new drive. For creating use **NewPrepareDriveTransaction()**
@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
@@ -141,7 +141,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account. Change it
 	replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
@@ -253,7 +253,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://54.255.165.100:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
@@ -374,7 +374,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://54.255.165.100:3000"
 	// Private key of some exist account. Change it
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
@@ -490,7 +490,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://54.255.165.100:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
@@ -580,7 +580,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://54.255.165.100:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
@@ -683,7 +683,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
@@ -784,7 +784,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
@@ -868,7 +868,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
@@ -952,7 +952,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"
@@ -1052,7 +1052,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "28FCECEA252231D2C86E1BCF7DD541552BDBBEFBB09324758B3AC199B4AA7B78"

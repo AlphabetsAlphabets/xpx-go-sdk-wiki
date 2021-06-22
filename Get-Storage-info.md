@@ -1,3 +1,5 @@
+> **WARNING** - OUTDATED
+
 ### Get Drive By Public Account
 Get drive is used to get some drive. For getting use **Storage.GetDrive()**
 
@@ -15,7 +17,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 
@@ -62,7 +64,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 
@@ -106,7 +108,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 
@@ -156,7 +158,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 
@@ -202,7 +204,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 
@@ -251,7 +253,7 @@ import (
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 )
 

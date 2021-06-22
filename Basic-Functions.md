@@ -5,16 +5,17 @@
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/nem2-crypto-go"
+	"fmt"
+
+	crypto "github.com/proximax-storage/go-xpx-crypto"
 )
 
 func main() {
 
-    KeyPair, _ := crypto.NewRandomKeyPair()
+	KeyPair, _ := crypto.NewRandomKeyPair()
 
-    fmt.Printf("PublicKey:\t%x\n",KeyPair.PublicKey.Raw)
-    fmt.Printf("PrivateKey:\t%x",KeyPair.PrivateKey.Raw)
+	fmt.Printf("PublicKey:\t%x\n", KeyPair.PublicKey.Raw)
+	fmt.Printf("PrivateKey:\t%x", KeyPair.PrivateKey.Raw)
 }
 ```
 
@@ -33,17 +34,18 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"fmt"
+
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 func main() {
-    publicKey := "04dd376196603c44a19fd500492e5de12de9ed353de070a788cb21f210645613"
+	publicKey := "04dd376196603c44a19fd500492e5de12de9ed353de070a788cb21f210645613"
 
-    Address, _ := sdk.NewAddressFromPublicKey(publicKey, sdk.MijinTest)
+	Address, _ := sdk.NewAddressFromPublicKey(publicKey, sdk.MijinTest)
 
-    fmt.Printf("Address:\t\t%v\n",Address.Address)
-    fmt.Printf("NetworkType:\t%v",Address.Type)
+	fmt.Printf("Address:\t\t%v\n", Address.Address)
+	fmt.Printf("NetworkType:\t%v", Address.Type)
 }
 ```
 
@@ -62,18 +64,19 @@ func main() {
 package main
 
 import (
-    "fmt"
-    "github.com/proximax-storage/go-xpx-catapult-sdk/sdk"
+	"fmt"
+
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const alicePrivateKey = "04dd376196603c44a19fd500492e5de12de9ed353de070a788cb21f210645613"
 
 func main() {
-    aliceAccount, _ := sdk.NewAccountFromPrivateKey(alicePrivateKey, sdk.MijinTest)
+	aliceAccount, _ := sdk.NewAccountFromPrivateKey(alicePrivateKey, sdk.MijinTest, nil)
 
-    fmt.Printf("Address:\t%v\n", aliceAccount.Address)
-    fmt.Printf("PrivateKey:\t%x\n", aliceAccount.KeyPair.PrivateKey.Raw)
-    fmt.Printf("PublicKey:\t%x", aliceAccount.KeyPair.PublicKey.Raw)
+	fmt.Printf("Address:\t%v\n", aliceAccount.Address)
+	fmt.Printf("PrivateKey:\t%x\n", aliceAccount.KeyPair.PrivateKey.Raw)
+	fmt.Printf("PublicKey:\t%x", aliceAccount.KeyPair.PublicKey.Raw)
 }
 ```
 

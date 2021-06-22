@@ -10,15 +10,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 	"sync"
 	"time"
 
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
@@ -129,21 +129,21 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
 )
 
-var timeout = time.Minute*5
+var timeout = time.Minute * 5
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -199,7 +199,7 @@ func main() {
 	}
 
 	// add handler to wait while exchange will be created
-	if err = wsClient.AddConfirmedAddedHandlers(accountBuyer.Address, func (info sdk.Transaction) bool {
+	if err = wsClient.AddConfirmedAddedHandlers(accountBuyer.Address, func(info sdk.Transaction) bool {
 		ch <- "Bought!"
 
 		return true
@@ -282,7 +282,7 @@ func main() {
 ```
 
 ### Remove Exchange Offer Transaction
-Exchange Offer Transaction is used to make exchange. For creating use **NewExchangeOfferTransaction()**
+Exchange Offer Transaction is used to remove exchange offer. For creating use **NewExchangeOfferTransaction()**
 
 Following parameters required:
 - **RemoveOffer** - An array of offers to removing.
@@ -294,21 +294,21 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 	"time"
 
+	"github.com/pkg/errors"
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
+	"github.com/proximax-storage/go-xpx-chain-sdk/sdk/websocket"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "2C8178EF9ED7A6D30ABDC1E4D30D68B05861112A98B1629FBE2C8D16FDE97A1C"
 )
 
-var timeout = time.Minute*2
+var timeout = time.Minute * 2
 
 func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
@@ -346,7 +346,7 @@ func main() {
 	offerType := sdk.SellOffer //or sdk.BuyOffer
 
 	// add handler to wait while exchange will be created
-	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+	if err = wsClient.AddConfirmedAddedHandlers(account.Address, func(info sdk.Transaction) bool {
 		ch <- "Removed!"
 
 		return true
@@ -361,7 +361,7 @@ func main() {
 		// An array of offers to removing
 		[]*sdk.RemoveOffer{
 			{
-				offerType, 				//offer type
+				offerType,              //offer type
 				sdk.StorageNamespaceId, //mosaic
 			},
 		},

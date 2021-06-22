@@ -10,11 +10,12 @@ package main
 import (
 	"context"
 	"fmt"
+
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Catapult-api-rest server
 	baseUrl = "http://localhost:3000"
 	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
@@ -30,14 +31,14 @@ func main() {
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
-	//Get some account
+	// Get some account
 	account, err := client.NewAccountFromPrivateKey(privateKey)
 	if err != nil {
 		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
 		return
 	}
 
-	//get secretLockInfos by account
+	// Get secretLockInfos by account
 	infosByAccount, err := client.Lock.GetSecretLockInfosByAccount(context.Background(), account.PublicAccount)
 	for _, v := range infosByAccount {
 		fmt.Println(v.CompositeHash)
@@ -57,14 +58,14 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/rand"
+
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
-	// Private key of some exist account. Change it
-	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
 func main() {
@@ -110,14 +111,13 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
+
 	"github.com/proximax-storage/go-xpx-chain-sdk/sdk"
 )
 
 const (
-	// Catapult-api-rest server.
+	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
-	// Private key of some exist account. Change it
-	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
 
 func main() {
