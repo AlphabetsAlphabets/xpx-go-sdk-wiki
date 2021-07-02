@@ -61,6 +61,7 @@ func main() {
 	wg.Add(1)
 	// add handler to wait while exchange will be created
 	err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+		fmt.Printf("Confirmed transaction: %s", info.String())
 		wg.Done()
 
 		return true

@@ -23,7 +23,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )
@@ -91,6 +91,7 @@ func main() {
 	wg.Add(1)
 	// add handler
 	err = wsClient.AddConfirmedAddedHandlers(account.Address, func (info sdk.Transaction) bool {
+	    fmt.Printf("Confirmed transaction: %s", info.String())
 		wg.Done()
 		return true
 	})
@@ -131,7 +132,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account. Change it
 	privateKey = "809CD6699B7F38063E28F606BD3A8AECA6E13B1E688FE8E733D13DB843BC14B7"
 )

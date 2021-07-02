@@ -45,23 +45,31 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
 
 	// Create websocket client
 	wsClient, err = websocket.NewClient(ctx, conf)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	defer wsClient.Close()
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Prepare a new drive
 	driveTx, err := client.NewPrepareDriveTransaction(
@@ -75,7 +83,9 @@ func main() {
 		1,
 		67,
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	//Aggregate
 	driveTx.ToAggregate(driveAccount.PublicAccount)
 
@@ -84,7 +94,9 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		[]sdk.Transaction{driveTx},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedAggTx, err := owner.SignWithCosignatures(aggTx, []*sdk.Account{driveAccount})
@@ -97,6 +109,7 @@ func main() {
 	wg.Add(1)
 	// add handler
 	err = wsClient.AddConfirmedAddedHandlers(driveAccount.Address, func (info sdk.Transaction) bool {
+		fmt.Printf("Confirmed transaction: %s", info.String())
 		wg.Done()
 
 		return true
@@ -106,12 +119,16 @@ func main() {
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedAggTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 
 	drive, err := client.Storage.GetDrive(ctx, driveAccount.PublicAccount)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	println(drive.String())
 }
@@ -158,14 +175,18 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
 
 	// Create websocket client
 	wsClient, err = websocket.NewClient(ctx, conf)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	defer wsClient.Close()
 
 	//start listen
@@ -177,18 +198,24 @@ func main() {
 
 	// A replicator. It must have storage units
 	replicator, err := client.NewAccountFromPrivateKey(replicatorPrivateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//Create a new join transaction
 	joinTx, err := client.NewJoinToDriveTransaction(
 		sdk.NewDeadline(time.Hour),
 		driveAccount.PublicAccount,
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedJoinTxOne, err := replicator.Sign(joinTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// Wait confirmed transaction
@@ -198,11 +225,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedJoinTxOne)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	if waitTimeout(wg, timeout) {
 		panic("Replicator didn't join")
@@ -254,7 +285,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 	replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
@@ -271,14 +302,18 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
 
 	// Create websocket client
 	wsClient, err = websocket.NewClient(ctx, conf)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	defer wsClient.Close()
 
@@ -287,11 +322,15 @@ func main() {
 
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------
 	// - prepare a new drive
@@ -322,11 +361,15 @@ func main() {
 		},
 		[]*sdk.Action{},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedFsTx, err := owner.Sign(fsTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -338,11 +381,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedFsTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -375,7 +422,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account. Change it
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 	replicatorPrivateKey = "349FB8AC38C9C4BD393B2E90E2CAB4ECBFA4E8088A6D840075BDEA1E22259956"
@@ -392,14 +439,18 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
 
 	// Create websocket client
 	wsClient, err = websocket.NewClient(ctx, conf)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	defer wsClient.Close()
 
 	//start listen
@@ -407,15 +458,21 @@ func main() {
 
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a replicator. It must have storage units
 	replicator, err := client.NewAccountFromPrivateKey(replicatorPrivateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------
 	// - prepare a new drive
@@ -436,11 +493,15 @@ func main() {
 			},
 		},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedDepositTx, err := replicator.Sign(depositTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	//wait to confirmed transaction
@@ -452,11 +513,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(context.Background(), signedDepositTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 
@@ -491,7 +556,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 )
@@ -507,7 +572,9 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
@@ -524,11 +591,15 @@ func main() {
 
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------------------------
 	// prepare a new drive
@@ -542,7 +613,9 @@ func main() {
 
 	// Sign transaction
 	signedEndTx, err := owner.Sign(endDriveTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// add handler
@@ -555,7 +628,9 @@ func main() {
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(context.Background(), signedEndTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -581,7 +656,7 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://54.255.165.100:3000"
+	baseUrl = "http://localhost:3000"
 	// Private key of some exist account
 	privateKey = "63485A29E5D1AA15696095DCE792AACD014B85CBC8E473803406DEE20EC71958"
 )
@@ -597,14 +672,18 @@ func main() {
 	defer cancel()
 
 	conf, err := sdk.NewConfig(ctx, []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client = sdk.NewClient(nil, conf)
 
 	// Create websocket client
 	wsClient, err = websocket.NewClient(ctx, conf)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	defer wsClient.Close()
 
@@ -613,11 +692,15 @@ func main() {
 
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------------------------
 	// prepare a new drive
@@ -629,18 +712,24 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		driveAccount.PublicAccount,
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	endDriveTx.ToAggregate(driveAccount.PublicAccount)
 
 	aggComplTrx, err := client.NewCompleteAggregateTransaction(
 		sdk.NewDeadline(time.Hour),
 		[]sdk.Transaction{endDriveTx},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedEndTx, err := replicator.SignWithCosignatures(aggComplTrx, []*sdk.Account{}) //sign with other replicators
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// add handler
@@ -653,7 +742,9 @@ func main() {
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(context.Background(), signedEndTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -691,22 +782,30 @@ const (
 
 func main() {
 	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
 	// Create an replicator that add a new exchange offer from
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// A new replicator
 	replicator, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------
 	// - prepare a new drive
@@ -725,7 +824,9 @@ func main() {
 			},
 		},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	// Aggregate
 	driveFilesRewardTx.ToAggregate(driveAccount.PublicAccount)
 
@@ -737,7 +838,9 @@ func main() {
 
 	// Sign transaction
 	signedRewardTx, err := driveAccount.SignWithCosignatures(aggRewardTx, []*sdk.Account{replicator})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// Wait confirmed transaction
@@ -747,11 +850,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(context.Background(), signedRewardTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -792,18 +899,24 @@ const (
 
 func main() {
 	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
 	// Create an replicator that add a new exchange offer from
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------
 	// - prepare a new drive
@@ -817,11 +930,15 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		driveAccount.PublicAccount,
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedVerificationTx, err := owner.Sign(startVerificationTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -834,11 +951,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedVerificationTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -876,18 +997,24 @@ const (
 
 func main() {
 	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
 	// Create an replicator that add a new exchange offer from
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Create a new drive account
 	driveAccount, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------
 	// - prepare a new drive
@@ -901,11 +1028,15 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		driveAccount.PublicAccount,
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Sign transaction
 	signedEndVerificationTx, err := owner.Sign(endVerificationTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg := &sync.WaitGroup{}
 	wg.Add(1)
@@ -918,11 +1049,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedEndVerificationTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Wait()
 }
@@ -960,20 +1095,26 @@ const (
 
 func main() {
 	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
 	//Create an account that add a new exchange offer from
 	account, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	var driveAccount *sdk.Account
 
 	// Some new replicator
 	replicator, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------------
 	//Prepare the drive
@@ -997,18 +1138,24 @@ func main() {
 			},
 		},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	startFileDownloadTx.ToAggregate(owner.PublicAccount)
 
 	downloadTx, err := client.NewCompleteAggregateTransaction(
 		sdk.NewDeadline(time.Hour),
 		[]sdk.Transaction{startFileDownloadTx},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//Sign downloadTx
 	signedDownloadTx, err := owner.Sign(downloadTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// Wait confirmed transaction
@@ -1018,11 +1165,15 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedDownloadTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
 
@@ -1060,20 +1211,26 @@ const (
 
 func main() {
 	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Use the default http client
 	client := sdk.NewClient(nil, conf)
 
 	// Some an account that will owner of a new drive
 	owner, err := client.NewAccountFromPrivateKey(privateKey)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	var driveAccount *sdk.Account
 
 	// Some new replicator
 	replicator, err := client.NewAccount()
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	//-----------------------------
 	//Prepare the drive
@@ -1099,19 +1256,25 @@ func main() {
 			},
 		},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 	endFileDownloadTx.ToAggregate(driveAccount.PublicAccount)
 
 	aggEndDownloadTx, err := client.NewCompleteAggregateTransaction(
 		sdk.NewDeadline(time.Hour),
 		[]sdk.Transaction{endFileDownloadTx},
 	)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	replicatorWithoutFirst := replicatorAccounts[1:]
 	// Send aggEndDownloadTx by first replicator and cosign by others
 	signedAggEndDownloadTx, err := replicatorAccounts[0].SignWithCosignatures(aggEndDownloadTx, replicatorWithoutFirst)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	wg.Add(1)
 	// Wait confirmed transaction
@@ -1121,10 +1284,14 @@ func main() {
 
 		return true
 	})
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 
 	// Announce transaction
 	_, err = client.Transaction.Announce(ctx, signedEndDownloadTx)
-	handleError(err)
+	if err != nil {
+		panic(err)
+	}
 }
 ```
