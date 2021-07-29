@@ -7,7 +7,7 @@
   * [Get Accounts info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Account-info)
   * [Get Transactions info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Transactions-info)
   * [Get Mosaic info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Mosaic-info)
-  * [Get Mosaic info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Mosaic-Levy-info)
+  * [Get Mosaic Levy info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Mosaic-Levy-info)
   * [Get Namespace info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Namespace-info)
   * [Get BlockChain info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-BlockChain-info)
   * [Get Network info](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Get-Network-info)
