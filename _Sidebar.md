@@ -34,7 +34,7 @@
     * [Account link](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Account-link)
     * [Upgrade config](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Transaction-Upgrade-config)
     * [Exchange](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Exchange)
-    * [SDA-SDA Exchange](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Get-SDA-SDA-Exchange-Offer)
+    * [SDA-SDA Exchange](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-SDA-SDA-Exchange)
     * [Secret lock](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Lock-secret)
     * [Storage](https://github.com/proximax-storage/go-xpx-chain-sdk/wiki/Transaction-Storage)
   * [Websocket](https://github.com/proximax-storage/go-xpx-catapult-sdk/wiki/Websocket)
