@@ -97,7 +97,7 @@ func main() {
 
 ```
 
-### Add SDA-SDA Exchange Offer
+### Place SDA-SDA Exchange Offer
 
 Creates a new SDA-SDA offer.
 
