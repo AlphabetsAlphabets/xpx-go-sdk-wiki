@@ -123,7 +123,7 @@ import (
 const (
 	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
-	// Private key of some exist account
+	// Private key of some existing account
 	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
@@ -205,7 +205,7 @@ import (
 const (
 	// Sirius api rest server
 	baseUrl = "http://localhost:3000"
-	// Private key of some exist account
+	// Private key of some existing account
 	privateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
 )
 
