@@ -86,7 +86,7 @@ func main() {
 	client := sdk.NewClient(nil, conf)
 
 	// Get the balance of the SDA-SDA offers by namespaceId (assetId)
-	sdaOfferBalanace, err := client.SdaExchange.GetSdaExchangeOfferByAssetId(context.Background(), sdk.StorageNamespaceId, "give")
+	sdaOfferBalanace, err := client.SdaExchange.GetSdaExchangeOfferByAssetId(context.Background(), sdk.XpxNamespaceId, "give")
 	if err != nil {
 		fmt.Printf("SdaExchange.GetSdaExchangeOfferByAssetId returned error: %s", err)
 		return
@@ -105,9 +105,11 @@ The following parameters are required:
 * **Deadline** - deadline of the transaction
 * **PlaceSdaOffer** - array of the PlaceSdaOffer
   * **SdaOffer**
-    * **MosaicGive** - mosaic to be given (e.g. SO)
-    * **MosaicGet** - mosaic to be gained (e.g. SM)
+    * **MosaicGive** - mosaic to be given
+    * **MosaicGet** - mosaic to be gained
   * **Duration** - duration of the SDA-SDA offer
+
+**Note:** Offers cannot be placed for special mosaics - Storage (SO), Streaming (SM), Review, Supercontract (SC)
 
 ```go
 package main
@@ -148,16 +150,16 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		[]*sdk.PlaceSdaOffer{
 			{
-				sdk.SdaOffer{
-					sdk.Storage(100),
-					sdk.Streaming(200),
+				SdaOffer: sdk.SdaOffer{
+					MosaicGive: &sdk.Mosaic{AssetId: ExampleMosaicId1, Amount: 1000},
+					MosaicGet:  &sdk.Mosaic{AssetId: ExampleMosaicId2, Amount: 2000},
 				},
 				sdk.Duration(1000),
 			},
 			{
-				sdk.SdaOffer{
-					sdk.Streaming(200),
-					sdk.Storage(100),
+				SdaOffer: sdk.SdaOffer{
+					MosaicGive: &sdk.Mosaic{AssetId: ExampleMosaicId2, Amount: 200},
+					MosaicGet:  &sdk.Mosaic{AssetId: ExampleMosaicId1, Amount: 100},
 				},
 				sdk.Duration(1000),
 			},
@@ -230,8 +232,12 @@ func main() {
 		sdk.NewDeadline(time.Hour),
 		[]*sdk.RemoveSdaOffer{
 			{
-				sdk.StorageNamespaceId,
-				sdk.StreamingNamespaceId,
+				AssetIdGive: ExampleNamespaceId1,
+				AssetIdGet:  ExampleNamespaceId2,
+			},
+			{
+				AssetIdGive: ExampleNamespaceId2,
+				AssetIdGet:  ExampleNamespaceId1,
 			},
 		},
 	)
