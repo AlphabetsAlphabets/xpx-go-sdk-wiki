@@ -9,6 +9,8 @@ The following parameters are required:
     * **MosaicGet** - mosaic to be gained (e.g. SM)
 * **Duration** - duration of the SDA-SDA offer
 
+**Note:** Offers cannot be placed for special mosaics - Storage (SO), Streaming (SM), Review, Supercontract (SC)
+
 ```go
 package main
 
@@ -82,9 +84,9 @@ func main() {
 		// An array of new SDA-SDA offers
 		[]*sdk.PlaceSdaOffer{
 			{
-				sdk.SdaOffer{
-					sdk.Storage(100),
-					sdk.Streaming(200),
+				SdaOffer: sdk.SdaOffer{
+					MosaicGive: &sdk.Mosaic{AssetId: ExampleMosaicId1, Amount: 1000},
+					MosaicGet:  &sdk.Mosaic{AssetId: ExampleMosaicId2, Amount: 2000},
 				},
 				sdk.Duration(1000),
 			},
@@ -205,8 +207,8 @@ func main() {
 		// An array of SDA-SDA offers to remove
 		[]*sdk.RemoveSdaOffer{
 			{
-				sdk.StorageNamespaceId,
-				sdk.StreamingNamespaceId,
+				AssetIdGive: ExampleNamespaceId1,
+				AssetIdGet:  ExampleNamespaceId2,
 			},
 		},
 	)
