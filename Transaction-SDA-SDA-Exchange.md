@@ -5,8 +5,8 @@ The following parameters are required:
 * **Deadline** - deadline of the transaction
 * **PlaceSdaOffer** - array of the PlaceSdaOffer
   * **SdaOffer**
-    * **MosaicGive** - mosaic to be given (e.g. SO)
-    * **MosaicGet** - mosaic to be gained (e.g. SM)
+    * **MosaicGive** - mosaic to be given
+    * **MosaicGet** - mosaic to be gained
 * **Duration** - duration of the SDA-SDA offer
 
 **Note:** Offers cannot be placed for special mosaics - Storage (SO), Streaming (SM), Review, Supercontract (SC)
