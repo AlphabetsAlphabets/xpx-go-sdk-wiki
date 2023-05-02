@@ -1,5 +1,14 @@
-
 > *NOTE*: You can use websockets to wait explicitly for transaction instead of just time.Sleep()
+
+## Pre-requisites
+Before you do anything you must do the following:
+1. If you don't have a normal account create it [here](https://bctestnetwallet.xpxsirius.io/).
+	- When creating an account make sure the network the account is created on is on `Sirius Testnet 1`.
+2. Create two more accounts. These two accounts will be the cosigners. 
+3. Copy the private key from all three accounts.
+4. From those three accounts choose which account will become the multisig account and which two will be cosigners. Make sure that the first cosigner has XPX in the wallet. XPX can be gained by visiting a [faucet](https://bctestnetfaucet.xpxsirius.io/#/). The faucet will ask for the address of the account, the address of an account is directly beneath the name of the account.
+
+On success XPX will be deducted from the first cosigner and the account specified to be converted to a multisig account will be converted to one. 
 
 ### Modify multisig account transaction
 
@@ -30,134 +39,92 @@ import (
 
 const (
 	// Sirius api rest server
-	baseUrl = "http://localhost:3000"
-	// Existing multisig private key
-	multisigPrivateKey = "3B9670B5CB19C893694FC49B461CE489BF9588BE16DBE8DC29CF06338133DEE6"
+	baseUrl = "http://bctestnet1.brimstone.xpxsirius.io:3000/"
+    // Private key of account that will be turned into a multisig account
+	multisigPrivateKey = "PRIVATE KEY"
+
 	// Cosignature public keys
-	cosignatoryOnePrivateKey      = "16DBE8DC29CF06338133DEE64FC49B461CE489BF9588BE3B9670B5CB19C89369"
-	cosignatoryTwoPrivateKey      = "461CE489BF9588BE3B9670B5CB19C8936916DBE8DC29CF06338133DEE64FC49B"
-	cosignatoryToRemovePrivateKey = "29CF06338133DEE64FC49BCB19C8936916DBE8DC461CE489BF9588BE3B9670B5"
+	cosignatoryOnePrivateKey      = "PRIVATE KEYS"
+	cosignatoryTwoPrivateKey      = "PRIVATE KEYS"
 	// Minimal approval count
 	minimalApproval = -1
 	// Minimal removal count
 	minimalRemoval = -1
 )
 
-func main() {
-
-	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+func HandleError(err error) {
 	if err != nil {
-		fmt.Printf("NewConfig returned error: %s", err)
-		return
+		fmt.Printf("Encountered error:\n%s", err)
+		panic("Found an error")
 	}
+}
 
-	// Use the default http client
+func main() {
+	conf, err := sdk.NewConfig(context.Background(), []string{baseUrl})
+	HandleError(err)
+
 	client := sdk.NewClient(nil, conf)
 
-	// Create an account from a private key
 	multisig, err := client.NewAccountFromPrivateKey(multisigPrivateKey)
-	if err != nil {
-		fmt.Printf("NewAccountFromPublicKey returned error: %s", err)
-		return
-	}
+	HandleError(err)
 
 	cosignerOne, err := client.NewAccountFromPrivateKey(cosignatoryOnePrivateKey)
-	if err != nil {
-		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-		return
-	}
+	HandleError(err)
 
 	cosignerTwo, err := client.NewAccountFromPrivateKey(cosignatoryTwoPrivateKey)
-	if err != nil {
-		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-		return
-	}
-
-	cosignerToRemove, err := client.NewAccountFromPrivateKey(cosignatoryToRemovePrivateKey)
-	if err != nil {
-		fmt.Printf("NewAccountFromPrivateKey returned error: %s", err)
-		return
-	}
+	HandleError(err)
 
 	transaction, err := client.NewModifyMultisigAccountTransaction(
-		// The maximum amount of time to include the transaction in the blockchain.
 		sdk.NewDeadline(time.Hour*1),
-		// The number of signatures needed to approve a transaction.
 		minimalApproval,
-		// The number of signatures needed to remove a cosignatory.
 		minimalRemoval,
-		// Array of cosigner accounts added or removed from the multisignature account.
 		[]*sdk.MultisigCosignatoryModification{
-			{sdk.Remove, cosignerToRemove.PublicAccount},
+            // Here it can be sdk.Remove instead of sdk.Add if you'd like to remove
+            // a cosigner from an existing multisig account
+			{sdk.Add, cosignerOne.PublicAccount},
+			{sdk.Add, cosignerTwo.PublicAccount},
 		},
 	)
-	if err != nil {
-		fmt.Printf("NewModifyMultisigAccountTransaction returned error: %s", err)
-		return
-	}
-	// Make modify multisig transaction part of aggregate bounded
+	HandleError(err)
+
 	transaction.ToAggregate(multisig.PublicAccount)
 
-	// Create a new aggregate bounded transaction
-	aggregateBoundedTransaction, err := client.NewBondedAggregateTransaction(
+	aggregateBondedTransaction, err := client.NewBondedAggregateTransaction(
 		sdk.NewDeadline(time.Hour*1),
 		[]sdk.Transaction{transaction},
 	)
-	if err != nil {
-		fmt.Printf("NewBondedAggregateTransaction returned error: %s", err)
-		return
-	}
+	HandleError(err)
 
-	// Sign by multisig
-	signedAggregateBoundedTransaction, err := multisig.Sign(aggregateBoundedTransaction)
-	if err != nil {
-		fmt.Printf("Sign returned error: %s", err)
-		return
-	}
+	signedAggregateBoundedTransaction, err := cosignerOne.Sign(aggregateBondedTransaction)
+	HandleError(err)
 
-	{ // Create lock funds transaction for aggregate bounded
-		lockFundsTrx, err := client.NewLockFundsTransaction(
-			// The maximum amount of time to include the transaction in the blockchain.
-			sdk.NewDeadline(time.Hour*1),
-			// Funds to lock
-			sdk.XpxRelative(10),
-			// Duration of lock transaction in blocks
-			sdk.Duration(100),
-			// Aggregate bounded transaction for lock
-			signedAggregateBoundedTransaction,
-		)
-		if err != nil {
-			fmt.Printf("NewLockFundsTransaction returned error: %s", err)
-			return
-		}
+	fmt.Println("ABT Tx Hash: ", signedAggregateBoundedTransaction.Hash.String())
 
-		// Sign transaction
-		signedTransaction, err := cosignerOne.Sign(lockFundsTrx)
-		if err != nil {
-			fmt.Printf("Sign returned error: %s", err)
-			return
-		}
+	lockFundsTrx, err := client.NewLockFundsTransaction(
+		sdk.NewDeadline(time.Hour*1),
+		sdk.XpxRelative(10),
+		sdk.Duration(230),
+		signedAggregateBoundedTransaction,
+	)
 
-		// Announce transaction
-		_, err = client.Transaction.Announce(context.Background(), signedTransaction)
-		if err != nil {
-			fmt.Printf("Transaction.Announce returned error: %s", err)
-			return
-		}
+	signedLockFundsTransaction, err := cosignerOne.Sign(lockFundsTrx)
+	HandleError(err)
+	fmt.Println("Lock Fund Tx hash: ", signedLockFundsTransaction.Hash.String())
 
-		// Wait for lock funds transaction to be harvested
-		time.Sleep(30 * time.Second)
-	}
+	_, err = client.Transaction.Announce(context.Background(), signedLockFundsTransaction)
+	HandleError(err)
+
+	time.Sleep(30 * time.Second)
+
+	lfStatus, err := client.Transaction.GetTransactionStatus(context.Background(), signedLockFundsTransaction.Hash.String())
+	HandleError(err)
+	fmt.Println(lfStatus)
 
 	// Announce signedAggregateBoundedTransaction
 	_, err = client.Transaction.AnnounceAggregateBonded(context.Background(), signedAggregateBoundedTransaction)
-	if err != nil {
-		fmt.Printf("Transaction.AnnounceAggregateBonded returned error: %s", err)
-		return
-	}
+	HandleError(err)
 
-	// Wait for signedAggregateBoundedTransaction to be harvested
-	time.Sleep(30 * time.Second)
+    time.Sleep(30 * time.Second)
 
 	// Create cosignature transaction by the first cosigner
 	signatureOneCosignatureTransaction := sdk.NewCosignatureTransactionFromHash(signedAggregateBoundedTransaction.Hash)
@@ -198,5 +165,7 @@ func main() {
 		return
 	}
 	println(info.String())
+    println("If everything is well XPX will be deducted from the first cosigner's account, and the account specificed will be converted to a multisig account.")
 }
 ```
+
