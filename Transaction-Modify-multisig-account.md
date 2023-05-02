@@ -79,9 +79,7 @@ func main() {
 		minimalApproval,
 		minimalRemoval,
 		[]*sdk.MultisigCosignatoryModification{
-            // Here it can be sdk.Remove instead of sdk.Add if you'd like to remove
-            // a cosigner from an existing multisig account
-			{sdk.Add, cosignerOne.PublicAccount},
+			{sdk.Add, cosignerOne.PublicAccount}, // To remove a cosigner use sdk.Remove instead
 			{sdk.Add, cosignerTwo.PublicAccount},
 		},
 	)
